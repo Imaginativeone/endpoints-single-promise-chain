@@ -1,11 +1,11 @@
 const assignmentResult = Promise.all([
   // All Users
-  fetch('/users', { method: 'get', headers: { 'Content-Type': 'application/json'}})
-    .then(user_response => user_response.json()),
+  // fetch('/users', { method: 'get', headers: { 'Content-Type': 'application/json'}})
+  //   .then(user_response => user_response.json()),
  
   // Correct Users
   fetch('/users', { method: 'get', headers: { 'Content-Type': 'application/json'}})
-    .then(user_response => user_response.json())
+    .then(res => res.json())
     .then((users) => {
       const corrected_users = users.filter((individual_user) => {
         if (!individual_user.state) {
@@ -14,74 +14,9 @@ const assignmentResult = Promise.all([
         }
       })
       console.log('corrected_users', corrected_users);
-      return corrected_users;
-    })
-
-    // Connect users to hobbies
-
-    // I already have the users
-    // Fetch the hobbies?
-    // - correct them first?
-
-    .then((users) => {
-
-      // Uncorrected Hobbies
-      const hobbies = fetch('/hobbies', { method: 'get', headers: { 'Content-Type': 'application/json'}})
-        .then(hobby_response => hobby_response.json())
-
-      const corrected_hobbies = hobbies
-        .then((hobbies) => {
-          const c_hobbies = hobbies.filter((hobby) => {
-            if(!hobby.experience) {
-              switch(hobby.years_played) {
-                case 1:
-                  hobby.experience = 'beginner';
-                  break;
-                case 2:
-                  hobby.experience = 'advanced';
-                  break;
-                case 3:
-                  hobby.experience = 'expert';
-                  break;
-              }
-              return hobby;
-            }
-          })
-          return c_hobbies;
-        })
-        .then(hobbies => 
-          fetch('/updateHobbies', { method: 'post', headers: { 'Content-Type': 'application/json'}, body: JSON.stringify(hobbies)} )
-          .then(res => res.json())
-          .then(hobbies => {
-            console.log('posted hobbies', hobbies);
-            return hobbies;
-          })
-        )
-
-        // const posted_hobbies = corrected_hobbies
-        //   .then(hobbies =>
-        //     fetch('/updateHobbies', { method: 'post', headers: { 'Content-Type': 'application/json'}, body: JSON.stringify(hobbies)} )
-        //     .then(res => res.json())
-        //     .then(hobbies => {
-        //       console.log('posted hobbies', hobbies);
-        //       return hobbies;
-        //     })
-        //   )
-
-      console.log('users', users);
-      console.log('hobbies', hobbies);
-      console.log('corrected hobbies', corrected_hobbies);
-      // console.log('posted hobbies', posted_hobbies);
-
+      // return corrected_users;
       return users;
     })
-
-    // If I needed to find all of the hobbies for a person, I would do something like
-    // users.map(user => {
-    //   user.hobbies = hobbies.filter(hobby => hobby.user_id == user.id);
-     
-    //   return user;
-    // })
 
     // Post the corrected users
     .then(users => fetch('/updateUsers',
