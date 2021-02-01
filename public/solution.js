@@ -133,7 +133,7 @@ const assignmentResult = Promise.all([
   })
   
   // console.log('u3', u3);
-
+  return assignmentResult;
   // users.map(user => {
   //   user.hobbies = hobbies.filter(hobby => hobby.user_id == user.id);
   //   return user;
