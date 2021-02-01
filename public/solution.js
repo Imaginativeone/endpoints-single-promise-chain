@@ -69,11 +69,14 @@ const assignmentResult = Promise.all([
         return favorite;
       }
     })
-
     // return favorites;
     return corrected_favorites;
-
   })
+  .then(favorites => 
+    fetch('/updateFavorites', { method: 'post', headers: { 'Content-Type': 'application/json'}, body: JSON.stringify(favorites)} )
+    .then(res => res.json())
+  ),
+
 ])
 .then((assignmentResult) => {
 
@@ -143,9 +146,9 @@ const assignmentResult = Promise.all([
       if ((user.id == c_hobby.user_id) && (c_hobby.last_modified.indexOf('now') !== -1)) {
 
         const m = `user.id: ${ user.id } c_hobby.user_id: ${ c_hobby.user_id } user.name ${ user.name } c_hobby.last_modified: ${ c_hobby.last_modified }`;
-        console.log(m);
+        // console.log(m);
 
-        console.log(user.hobbies, c_hobby);
+        // console.log(user.hobbies, c_hobby);
 
         user.hobbies.forEach((userHobby, index) => {
           if (userHobby.id === c_hobby.id) {
@@ -159,6 +162,36 @@ const assignmentResult = Promise.all([
     return corrected_hobbies;
   })
 
+  // Integrate Corrected Favorites
+  const u5 = users.map(user => {
+
+    // console.log('u3 users', user);
+    corrected_favorites.filter((c_favorite) => {
+
+      // console.log('u3 c_favorite', c_favorite);
+
+      if ((user.id == c_favorite.user_id) && 
+          (c_favorite.last_modified !== undefined) && 
+          (c_favorite.last_modified !== "") && 
+          (c_favorite.last_modified.indexOf('now') !== -1)) {
+
+        const m = `user.id: ${ user.id } c_favorite.user_id: ${ c_favorite.user_id } user.name ${ user.name } c_favorite.last_modified: ${ c_favorite.last_modified }`;
+        console.log(m);
+
+        console.log(user.favorites, c_favorite);
+
+        user.favorites.forEach((userFavorite, index) => {
+          if (userFavorite.id === c_favorite.id) {
+            user.favorites[index] = c_favorite;
+          }
+        })
+
+      }
+      
+    })
+    return corrected_favorites;
+  })
+  
   // console.log('u3', u3);
   return assignmentResult;
   // users.map(user => {
