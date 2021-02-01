@@ -15,25 +15,18 @@ const assignmentResult = Promise.all([
       })
 
       console.log('corrected_users', corrected_users);
+      return corrected_users;
 
-      const updated_users = fetch('/updateUsers', { 
-        method: 'post', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corrected_users)})
-        .then(res => res.json())
-
-      console.log('updated_users', updated_users);
-
-      return users;
-
-    }),
+    })
     // Post the corrected users
-    // .then(users => fetch('/updateUsers', { method: 'post', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(users)})
-    // .then(res => res.json())
-  // ),
+    .then(users => fetch('/updateUsers', { method: 'post', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(users)})
+    .then(res => res.json())
+  ),
   // Hobbies
   fetch('/hobbies', { method: 'get', headers: { 'Content-Type': 'application/json'}})
     .then(res => res.json())
     .then((hobbies) => {
-      hobbies.filter((hobby) => {
+      const corrected_hobbies = hobbies.filter((hobby) => {
         if(!hobby.experience) {
           switch(hobby.years_played) {
             case 1:
@@ -49,7 +42,8 @@ const assignmentResult = Promise.all([
           return hobby;
         }
       })
-      return hobbies;
+      // return hobbies;
+      return corrected_hobbies;
     })
     .then(hobbies => 
       fetch('/updateHobbies', { method: 'post', headers: { 'Content-Type': 'application/json'}, body: JSON.stringify(hobbies)} )
@@ -59,14 +53,15 @@ const assignmentResult = Promise.all([
   .then(response => response.json())
   .then((favorites) => {
 
-    favorites.filter((favorite) => {
+    corrected_favorites = favorites.filter((favorite) => {
       if (!favorite.type) {
         favorite.type = "other"
         return favorite;
       }
     })
 
-    return favorites;
+    // return favorites;
+    return corrected_favorites;
 
   })
 ])

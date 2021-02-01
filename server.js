@@ -74,9 +74,10 @@ function updateData(type, newData) {
       updatedRecord = { id: item.id, user_id: item.user_id, error: "could not be saved"};
     } else {
 
-      console.log("Item for modification", item);
-
+      
       item.last_modified = 'now';
+      console.log("Item for modification", item);
+      
       updatedRecord = item;
     }
 
