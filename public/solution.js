@@ -132,6 +132,7 @@ const assignmentResult = Promise.all([
     return user;
   })
   
+  // Integrate Corrected Hobbies
   const u4 = users.map(user => {
 
     // console.log('u3 users', user);
