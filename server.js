@@ -18,11 +18,11 @@ server.get('/users', (req, res) => {
 });
 
 server.get('/hobbies', (req, res) => {
-  res.json(data.users);
+  res.json(data.hobbies);
 });
 
 server.get('/favorites', (req, res) => {
-  res.json(data.users);
+  res.json(data.favorites);
 });
 
 server.post('/updateUsers', (req, res) => {  
