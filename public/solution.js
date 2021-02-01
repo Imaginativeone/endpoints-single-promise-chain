@@ -2,8 +2,14 @@ const assignmentResult = Promise.all([
   // All Users
   fetch('/users', { method: 'get', headers: { 'Content-Type': 'application/json'}})
     .then(res => res.json()),
+    
+  fetch('/hobbies', { method: 'get', headers: { 'Content-Type': 'application/json'}})
+    .then(res => res.json()),
 
-  // Correct Users
+  fetch('/favorites', { method: 'get', headers: { 'Content-Type': 'application/json'}})
+    .then(res => res.json()),
+
+    // Correct Users
   fetch('/users', { method: 'get', headers: { 'Content-Type': 'application/json'}})
     .then(res => res.json())
     .then((users) => {
@@ -71,12 +77,35 @@ const assignmentResult = Promise.all([
 ])
 .then((assignmentResult) => {
 
-  const [userlist, corrected_users, corrected_hobbies, corrected_favorites] = assignmentResult;
-  
-  console.log(userlist);
+  const [
+    users,
+    hobbies,
+    favorites,
+    corrected_users, 
+    corrected_hobbies, 
+    corrected_favorites] = assignmentResult;
+
+  console.log(users);
+  console.log(hobbies);
+  console.log(favorites);
+
   console.log(corrected_users);
   console.log(corrected_hobbies);
   console.log(corrected_favorites);
+
+  console.log('corrected_hobbies', corrected_hobbies);
+
+  const u = users.map(user => {
+    user.hobbies = hobbies.filter(hobby => hobby.user_id == user.id);
+    return user;
+  })
+
+  console.log('u', u);
+
+  // users.map(user => {
+  //   user.hobbies = hobbies.filter(hobby => hobby.user_id == user.id);
+  //   return user;
+  // })
 
 })
 
