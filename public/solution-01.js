@@ -61,6 +61,6 @@ function correctFavorites(favorites) {
       return favorite;
     }
   })
-  console.log('favorites', favorites);
+  console.log('corrected_favorites', favorites);
   return favorites;
 }
