@@ -95,11 +95,13 @@ const assignmentResult = Promise.all([
 
   console.log('corrected_hobbies', corrected_hobbies);
 
+  // Coordinate hobbies
   const u1 = users.map(user => {
     user.hobbies = hobbies.filter(hobby => hobby.user_id == user.id);
     return user;
   })
 
+  // Coordinate favorites
   const u2 = users.map(user => {
     user.favorites = favorites.filter(favorite => favorite.user_id == user.id);
     return user;
@@ -107,6 +109,15 @@ const assignmentResult = Promise.all([
 
   console.log('u1', u1);
   console.log('u2', u2);
+  
+  // Coordinate corrected users
+  const u3 = users.map(user => {
+
+    console.log('u3 users', user);
+
+  })
+  
+  console.log('u3', u3);
 
   // users.map(user => {
   //   user.hobbies = hobbies.filter(hobby => hobby.user_id == user.id);
