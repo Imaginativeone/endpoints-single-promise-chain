@@ -2,15 +2,34 @@ const assignmentResult = Promise.all([
   // Correct Users
   fetch('/users', { method: 'get', headers: { 'Content-Type': 'application/json'}})
     .then(res => res.json())
-    .then(users => {
-      users.filter(individual_user => individual_user.state ? individual_user : individual_user.state = "PA")
+    .then((users) => {
+
+      const corrected_users = users.filter((user) => { 
+        // const userState = !user.state ? user.state = "PA" : user
+        // console.log('userState', userState);
+        if (!user.state) {
+          user.state = "PA"
+          console.log(`user: ${ user.name } (${ user.id }) was updated`);
+          return user;
+        }
+      })
+
+      console.log('corrected_users', corrected_users);
+
+      const updated_users = fetch('/updateUsers', { 
+        method: 'post', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corrected_users)})
+        .then(res => res.json())
+
+      console.log('updated_users', updated_users);
+
       return users;
-    })
+
+    }),
     // Post the corrected users
-    .then(users => fetch('/updateUsers', { method: 'post', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(users)})
-    .then(res => res.json())
-  ),
-  // Uncorrected Hobbies
+    // .then(users => fetch('/updateUsers', { method: 'post', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(users)})
+    // .then(res => res.json())
+  // ),
+  // Hobbies
   fetch('/hobbies', { method: 'get', headers: { 'Content-Type': 'application/json'}})
     .then(res => res.json())
     .then((hobbies) => {
@@ -39,31 +58,16 @@ const assignmentResult = Promise.all([
   fetch('/favorites', { method: "get", headers: { 'Content-Type': 'application/json'} })
   .then(response => response.json())
   .then((favorites) => {
-    console.log('favorites', favorites);
-    // return favorites.map(favoriteUnit => !favoriteUnit.type ? favoriteUnit.type = "other" : favoriteUnit.type)
-   
-    const corrected_favorites = favorites.filter((favoriteUnit) => {
-      if (!favoriteUnit.type) {
-        favoriteUnit.type = "other"
-        return favoriteUnit;
+
+    favorites.filter((favorite) => {
+      if (!favorite.type) {
+        favorite.type = "other"
+        return favorite;
       }
-    })
-
-    console.log('corrected_favorites', corrected_favorites);
-
-    fetch('/updateFavorites', { method: "post", headers: { 'Content-Type': 'application/json'}, body: JSON.stringify(corrected_favorites) })
-    .then(res => res.json())
-    .then(corrected_favorites => {
-      let hey = document.createElement('div');
-      hey.innerHTML = JSON.stringify(corrected_favorites);
-      document.getElementById('main').appendChild(hey);
     })
 
     return favorites;
 
-  })
-  .then((info) => {
-    console.log('info', info);
   })
 ])
 

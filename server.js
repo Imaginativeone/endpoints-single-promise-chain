@@ -52,9 +52,13 @@ server.listen(port, () => {
 });
 
 function updateData(type, newData) {
+
+  console.log('Updating Data');
+
   let indexForError, updatedRecord;
   let updatedData = [];
-  // users and hobbies are treated normally.  favorites will have the possibility of throwing an error
+  
+  // users and hobbies are treated normally. favorites will have the possibility of throwing an error
   if (type == 'favorites') {
     const count = newData.length;
     indexForError = Math.floor(Math.random() * Math.floor(count));
@@ -69,6 +73,9 @@ function updateData(type, newData) {
     if (type == 'favorites' && index == indexForError) {
       updatedRecord = { id: item.id, user_id: item.user_id, error: "could not be saved"};
     } else {
+
+      console.log("Item for modification", item);
+
       item.last_modified = 'now';
       updatedRecord = item;
     }
