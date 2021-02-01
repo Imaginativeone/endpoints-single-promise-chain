@@ -95,12 +95,18 @@ const assignmentResult = Promise.all([
 
   console.log('corrected_hobbies', corrected_hobbies);
 
-  const u = users.map(user => {
+  const u1 = users.map(user => {
     user.hobbies = hobbies.filter(hobby => hobby.user_id == user.id);
     return user;
   })
 
-  console.log('u', u);
+  const u2 = users.map(user => {
+    user.favorites = favorites.filter(favorite => favorite.user_id == user.id);
+    return user;
+  })
+
+  console.log('u1', u1);
+  console.log('u2', u2);
 
   // users.map(user => {
   //   user.hobbies = hobbies.filter(hobby => hobby.user_id == user.id);
