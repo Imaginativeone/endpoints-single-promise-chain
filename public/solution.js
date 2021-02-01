@@ -55,22 +55,22 @@ const assignmentResult = Promise.all([
     ),
   // Corrected favorites  
   fetch('/favorites', { method: "get", headers: { 'Content-Type': 'application/json'} })
-  .then(response => response.json())
-  .then((favorites) => {
-    corrected_favorites = favorites.filter((favorite) => {
-      if (!favorite.type) {
-        favorite.type = "other"
-        return favorite;
-      }
+    .then(response => response.json())
+    .then((favorites) => {
+      corrected_favorites = favorites.filter((favorite) => {
+        if (!favorite.type) {
+          favorite.type = "other"
+          return favorite;
+        }
+      })
+      return corrected_favorites;
     })
-    return corrected_favorites;
-  })
-  // Post corrected favorites
-  .then(favorites => 
-    fetch('/updateFavorites', { method: 'post', headers: { 'Content-Type': 'application/json'}, body: JSON.stringify(favorites)} )
-    .then(res => res.json())
-  ),
-])
+    // Post corrected favorites
+    .then(favorites => 
+      fetch('/updateFavorites', { method: 'post', headers: { 'Content-Type': 'application/json'}, body: JSON.stringify(favorites)} )
+      .then(res => res.json())
+    ),
+  ])
 .then((assignmentResult) => {
 
   // These promise results are here so that I don't have to fetch again.
@@ -143,6 +143,4 @@ const assignmentResult = Promise.all([
 console.log('assignmentResult', assignmentResult);
 
 // DO NOT DELETE THIS!  
-function reset() {
-  fetch('/reset');
-}
+function reset() { fetch('/reset'); }
