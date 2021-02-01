@@ -19,12 +19,12 @@ const assignmentResult = Promise.all([
         // console.log('userState', userState);
         if (!user.state) {
           user.state = "PA"
-          console.log(`user: ${ user.name } (${ user.id }) was updated`);
+          // console.log(`user: ${ user.name } (${ user.id }) was updated`);
           return user;
         }
       })
 
-      console.log('corrected_users', corrected_users);
+      // console.log('corrected_users', corrected_users);
       return corrected_users;
 
     })
@@ -85,15 +85,15 @@ const assignmentResult = Promise.all([
     corrected_hobbies, 
     corrected_favorites] = assignmentResult;
 
-  console.log(users);
-  console.log(hobbies);
-  console.log(favorites);
+  // console.log(users);
+  // console.log(hobbies);
+  // console.log(favorites);
 
-  console.log(corrected_users);
-  console.log(corrected_hobbies);
-  console.log(corrected_favorites);
+  // console.log(corrected_users);
+  // console.log(corrected_hobbies);
+  // console.log(corrected_favorites);
 
-  console.log('corrected_hobbies', corrected_hobbies);
+  // console.log('corrected_hobbies', corrected_hobbies);
 
   // Coordinate hobbies
   const u1 = users.map(user => {
@@ -107,13 +107,13 @@ const assignmentResult = Promise.all([
     return user;
   })
 
-  console.log('u1', u1);
-  console.log('u2', u2);
+  // console.log('u1', u1);
+  // console.log('u2', u2);
   
   // Coordinate corrected users
   const u3 = users.map(user => {
 
-    console.log('u3 users', user);
+    // console.log('u3 users', user);
     corrected_users.filter((c_user) => {
 
       // console.log('u3 c_user', c_user);
@@ -121,13 +121,18 @@ const assignmentResult = Promise.all([
       if (user.id == c_user.id) {
         // console.log('Matched!', user.id, c_user.user_id, user.name, c_user.last_modified);
         const m = `user.id: ${ user.id } c_user.id: ${ c_user.id } user.name ${ user.name } c_user.last_modified: ${ c_user.last_modified }`;
-        console.log(m);
+        // console.log(m);
+
+        // Replace user's state with corrected state
+        user.state = c_user.state;
+        user.last_modified = c_user.last_modified;
       }
       
     })
+    return user;
   })
   
-  console.log('u3', u3);
+  // console.log('u3', u3);
 
   // users.map(user => {
   //   user.hobbies = hobbies.filter(hobby => hobby.user_id == user.id);
