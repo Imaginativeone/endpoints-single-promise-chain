@@ -1,4 +1,8 @@
 const assignmentResult = Promise.all([
+  // All Users
+  fetch('/users', { method: 'get', headers: { 'Content-Type': 'application/json'}})
+    .then(res => res.json()),
+
   // Correct Users
   fetch('/users', { method: 'get', headers: { 'Content-Type': 'application/json'}})
     .then(res => res.json())
@@ -65,6 +69,16 @@ const assignmentResult = Promise.all([
 
   })
 ])
+.then((assignmentResult) => {
+
+  const [userlist, corrected_users, corrected_hobbies, corrected_favorites] = assignmentResult;
+  
+  console.log(userlist);
+  console.log(corrected_users);
+  console.log(corrected_hobbies);
+  console.log(corrected_favorites);
+
+})
 
 console.log('assignmentResult', assignmentResult);
 
