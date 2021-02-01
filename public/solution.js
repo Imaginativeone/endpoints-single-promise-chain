@@ -114,7 +114,17 @@ const assignmentResult = Promise.all([
   const u3 = users.map(user => {
 
     console.log('u3 users', user);
+    corrected_users.filter((c_user) => {
 
+      // console.log('u3 c_user', c_user);
+
+      if (user.id == c_user.id) {
+        // console.log('Matched!', user.id, c_user.user_id, user.name, c_user.last_modified);
+        const m = `user.id: ${ user.id } c_user.id: ${ c_user.id } user.name ${ user.name } c_user.last_modified: ${ c_user.last_modified }`;
+        console.log(m);
+      }
+      
+    })
   })
   
   console.log('u3', u3);
