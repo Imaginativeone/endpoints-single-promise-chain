@@ -132,6 +132,32 @@ const assignmentResult = Promise.all([
     return user;
   })
   
+  const u4 = users.map(user => {
+
+    // console.log('u3 users', user);
+    corrected_hobbies.filter((c_hobby) => {
+
+      // console.log('u3 c_hobby', c_hobby);
+
+      if ((user.id == c_hobby.user_id) && (c_hobby.last_modified.indexOf('now') !== -1)) {
+
+        const m = `user.id: ${ user.id } c_hobby.user_id: ${ c_hobby.user_id } user.name ${ user.name } c_hobby.last_modified: ${ c_hobby.last_modified }`;
+        console.log(m);
+
+        console.log(user.hobbies, c_hobby);
+
+        user.hobbies.forEach((userHobby, index) => {
+          if (userHobby.id === c_hobby.id) {
+            user.hobbies[index] = c_hobby;
+          }
+        })
+
+      }
+      
+    })
+    return corrected_hobbies;
+  })
+
   // console.log('u3', u3);
   return assignmentResult;
   // users.map(user => {
