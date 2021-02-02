@@ -6,35 +6,40 @@ const assignmentResult = Promise.all(
   ]
 )
 .then((data) => {
-
-  console.log('data', data);
+  data[0] = correctUsers(data[0])
+  data[1] = correctHobbies(data[1]),
+  data[2] = correctFavorites(data[2])
   return data;
-
 })
-.then(data => Promise.all(
-  [
-    correctUsers(data[0]),
-    correctHobbies(data[1]),
-    correctFavorites(data[2])
-  ])
-)
-.then()
+.then((data) => { 
+  const p = Promise.all([updateUsers(data[0]), updateHobbies(data[1]), updateFavorites(data[2])])
+  return p;
+})
+.then((updatedData) => {
+  console.log('Final Print', updatedData)
+  return updatedData;
+})
+.then((data) => {
+  console.log('END DATA', data);
+  return data;
+})
 
 console.log('assignmentResult', assignmentResult);
 
 function correctUsers(users) {
-  users.filter((user) => {
+  const corrected_users = users.filter((user) => { 
     if (!user.state) {
-      user.state = "PA";
+      user.state = "PA"
+      return user;
     }
-    return user;
   })
-  console.log('corrected_users', users);
-  return users;
+  console.log('corrected_users', corrected_users);
+  // console.log('corrected_users (all?)', users);
+  return corrected_users;
 }
 
 function correctHobbies(hobbies) {
-  hobbies.filter((hobby) => {
+  const corrected_hobbies = hobbies.filter((hobby) => {
     if(!hobby.experience) {
       switch(hobby.years_played) {
         case 1:
@@ -50,17 +55,71 @@ function correctHobbies(hobbies) {
       return hobby;
     }
   })
-  console.log('corrected_hobbies', hobbies);
-  return hobbies;
+  console.log('corrected_hobbies', corrected_hobbies);
+  // console.log('corrected_hobbies (all?)', hobbies);
+  return corrected_hobbies;
+  // return hobbies;
 }
 
 function correctFavorites(favorites) {
-  favorites.filter((favorite) => {
+  corrected_favorites = favorites.filter((favorite) => {
     if (!favorite.type) {
       favorite.type = "other"
       return favorite;
     }
   })
-  console.log('corrected_favorites', favorites);
-  return favorites;
+  return corrected_favorites;
+  // return favorites;
 }
+
+function updateUsers(users) {
+  
+  const f = fetch('/updateUsers', { 
+      method: 'post', 
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify(users)
+    })
+  .then(res => res.json())
+
+  console.log('updated users from post fetch', f);
+  // return users;
+  return f;
+}
+
+function updateHobbies(hobbies) {
+
+  const f = fetch('/updateHobbies', { 
+    method: 'post', 
+    headers: { 'Content-Type': 'application/json' }, 
+    body: JSON.stringify(hobbies)
+  })
+  .then(res => res.json())
+
+  console.log('updated hobbies from post fetch', f);
+  // return data;
+  return f;
+}
+
+function updateFavorites(favorites) {
+
+  const f = fetch('/updateFavorites', { 
+    method: 'post', 
+    headers: { 'Content-Type': 'application/json' }, 
+    body: JSON.stringify(favorites)
+  })
+  .then(res => res.json())
+
+  console.log('updated hobbies from post fetch', f);
+  return f;
+}
+
+// PromiseAll([usersPromise, hobbiesPromise, favoritesPromise])
+//   .then(data => { 
+//     data[0] = correctUsers(data[0])
+//     data[1] = correctHobbies(data[1])
+//     data[2] = correctFavorites(data[2])
+    
+//     return data
+//   })
+//   .then(data => PromiseAll([updateUsers, updateHobbies, updateFavorites])
+//   .then(updatedData => console.log(updatedData))
