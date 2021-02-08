@@ -48,11 +48,27 @@ const assignmentResult = Promise.all(
   console.log('Updated Users WITH hobbies', usersWithHobbies);
   
   let usersWithHobbiesAndFavorites = usersWithHobbies.map((user) => { 
+    user.user_id = user.id;
     user.favorites = correctedFavorites.filter(favorite => {user.id === favorite.user_id })
     return user;
   })
 
   console.log('Updated Users with hobbies and favorites', usersWithHobbiesAndFavorites);
+
+  let totalArray = usersWithHobbiesAndFavorites.concat(hobbiesWithoutUsers).concat(favoritesWithoutUsers);
+  
+  totalArray.sort(
+    function (a, b) {
+      return a.user_id - b.user_id;
+    }
+  );
+
+  // sort by value
+  // items.sort(function (a, b) {
+  //   return a.value - b.value;
+  // });
+
+  console.log(totalArray);
 
 })
 
