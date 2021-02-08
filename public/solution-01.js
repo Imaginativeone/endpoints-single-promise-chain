@@ -20,26 +20,52 @@ const assignmentResult = Promise.all(
 
   let hobsnousers = organizedData[1].filter(h => !organizedData[0].some(user => user.id === h.user_id));
   let favsnousers = organizedData[2].filter(f => !organizedData[0].some(user => user.id === f.user_id));
+
+  organizedData[0].map((user) => {
+    user.user_id = user.id;
+    return user;
+  })
   
   let users_hobs = organizedData[0].map(user => {
     user.hobbies = organizedData[1].filter(hobby => hobby.user_id === user.id)
     return user;
   })
   
-  let users_hobs_favs = users_hobs.map((user) => { 
-    user.user_id = user.id;
-    user.favorites = organizedData[2].filter(favorite => {user.id === favorite.user_id })
+  console.log('users_hobs', users_hobs);
+  
+  let users_favs = organizedData[0].map((user) => { 
+    user.favorites = organizedData[2].filter(favorite => { 
+      if (user.id == favorite.user_id) {
+        console.log(`${ user.id } equals ${ favorite.user_id }`);
+        user.favorites = favorite;
+        return favorite;
+      }
+    })
     return user;
   })
+
+  const combo = users_hobs.concat(hobsnousers, favsnousers);
   
-  let present = users_hobs_favs.concat(hobsnousers).concat(favsnousers);
+  console.log('combo', combo);
+
+  combo.forEach((item) => {
+
+    if (item.user_id) {
+      console.log(`NON USER ${ item.user_id }`);
+    } else {
+      console.log('user', item);
+    }
+
+  })
+
+  // let present = combo;
   
-  present.sort((a, b) => {
+  combo.sort((a, b) => {
       return a.user_id - b.user_id;
     }
   );
 
-  console.log(present);
+  console.log(combo);
 
 })
 
