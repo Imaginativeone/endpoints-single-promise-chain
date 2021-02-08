@@ -1,43 +1,18 @@
-Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
+const assignmentResult = Promise.all(
+  [
+    usersPromise      = fetch('/users',     { method: 'get', headers: { 'Content-Type': 'application/json'}}).then((res) => res.json()),
+    hobbiesPromise    = fetch('/hobbies',   { method: 'get', headers: { 'Content-Type': 'application/json'}}).then((res) => res.json()),
+    favoritesPromise  = fetch('/favorites', { method: 'get', headers: { 'Content-Type': 'application/json'}}).then((res) => res.json())
+  ]
+)
 .then((data) => {
   data[0] = correctUsers(data[0])
   data[1] = correctHobbies(data[1]),
   data[2] = correctFavorites(data[2])
   return data;
 })
-.then(data => Promise.all([tryUrl('/updateUsers', data[0], 'post'), tryUrl('/updateHobbies', data[1], 'post'), tryUrl('/updateFavorites', data[2],  'post')]))
-.then(updatedData => {
-
-  updatedData[0].map((user) => {
-    console.log('user', user.name);
-    updatedData[1].map((hobby) => {
-      if (user.id === hobby.user_id) { 
-        console.log('hobby', hobby);
-      }
-    })
-  });
-
-  // console.log(updatedData);
-  return updatedData;
-})
-.then((finalData) => {
-
-  finalData.forEach((datum) => {
-
-    console.log('datum', datum);
-
-  })
-
-})
-
-function tryUrl(url, data, method='get') {
-
-  body = (method==='post') ? JSON.stringify(data) : null;
-  
-  return fetch(url, { method: method, headers: { 'Content-Type': 'application/json' }, body: body })
-  .then(res => res.json())
-
-}
+.then(data => Promise.all([updateUsers(data[0]), updateHobbies(data[1]), updateFavorites(data[2])]))
+.then(updatedData => console.log(updatedData))
 
 function correctUsers(users) {
   return users.filter((user) => { 
@@ -74,4 +49,31 @@ function correctFavorites(favorites) {
       return favorite;
     }
   })
+}
+
+function updateUsers(users) {  
+  return fetch('/updateUsers', { 
+      method: 'post', 
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify(users)
+    })
+  .then(res => res.json())
+}
+
+function updateHobbies(hobbies) {
+  return fetch('/updateHobbies', { 
+    method: 'post', 
+    headers: { 'Content-Type': 'application/json' }, 
+    body: JSON.stringify(hobbies)
+  })
+  .then(res => res.json())
+}
+
+function updateFavorites(favorites) {
+  return fetch('/updateFavorites', { 
+    method: 'post', 
+    headers: { 'Content-Type': 'application/json' }, 
+    body: JSON.stringify(favorites)
+  })
+  .then(res => res.json())
 }
