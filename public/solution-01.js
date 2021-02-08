@@ -17,40 +17,26 @@ const assignmentResult = Promise.all(
   return updatedData;
 })
 .then((organizedData) => {
+
   console.log('organizedData', organizedData);
 
   console.log('Iterate through the corrected users');
-  let correctedUsers = organizedData[0];
-
-  // correctedUsers.map((user) => {
-  //   console.log('corrected-user', user);
-  // });
-
+  
   console.log('Connect the corrected users to the corrected hobbies');
   console.log('First, iterate through the hobbies, to see what I have');
+  
+  let correctedUsers        = organizedData[0];
+  let correctedHobbies      = organizedData[1];
+  let correctedFavorites    = organizedData[2];
 
-  let correctedHobbies = organizedData[1];
-
-  // correctedHobbies.map((hobby) => {
-  //   console.log('corrected-hobby', hobby);
-  // })
-
-  // var myFirstObjArray = [{foo: 1, bar: 1}, {foo: 3, bar: 3}, {foo: 4, bar: 5}],
-  // mySecondObjArray = [{foo: 2}, {foo: 4}, {foo: 5}],
+  let hobbiesWithoutUsers   = correctedHobbies  .filter(h => !correctedUsers.some(user => user.id === h.user_id));
+  let favoritesWithoutUsers = correctedFavorites.filter(f => !correctedUsers.some(user => user.id === f.user_id));
   
-  // firstArray  = myFirstObjArray.filter(o=> !mySecondObjArray.some(i=> i.foo === o.foo));
-  // secondArray = mySecondObjArray.filter(o=> !myFirstObjArray.some(i=> i.foo === o.foo));
-  
-  // console.log(firstArray.map(o=> {return {'foo' :  o.foo}}))
-  // console.log(secondArray.map(o=> {return {'foo' :  o.foo}}))
-  
-  let usersWithoutHobbies   = correctedUsers    .filter(o => !correctedHobbies.some(i => i.user_id === o.id));
-  let hobbiesWithoutUsers   = correctedHobbies  .filter(o => !correctedUsers  .some(i => i.id === o.user_id));
-  
-  console.log('Updated Users with no hobbies', usersWithoutHobbies);
   console.log('Updated Hobbies with no users', hobbiesWithoutUsers);
+  console.log('Updated Favorites with no users', favoritesWithoutUsers);
   
   let usersWithHobbies = correctedUsers.map(user => {
+
     user.hobbies = correctedHobbies.filter((hobby) => {
       if (user.id === hobby.user_id) {
         return hobby;
@@ -61,35 +47,12 @@ const assignmentResult = Promise.all(
   
   console.log('Updated Users WITH hobbies', usersWithHobbies);
   
-  let correctedFavorites = organizedData[2];
-  let favoritesWithoutUsers = correctedFavorites.filter(o => !correctedUsers  .some(i => i.id === o.user_id));
-  console.log('Updated Favorites with no users', favoritesWithoutUsers);
-  
-  let usersWithHobbiesAndFavorites = usersWithHobbies.map((user) => {
-    
-    user.favorites = correctedFavorites.filter((favorite) => {
-      if (user.id === favorite.user_id) {
-        return favorite;
-      }
-    })
+  let usersWithHobbiesAndFavorites = usersWithHobbies.map((user) => { 
+    user.favorites = correctedFavorites.filter(favorite => {user.id === favorite.user_id })
     return user;
   })
 
   console.log('Updated Users with hobbies and favorites', usersWithHobbiesAndFavorites);
-
-  // correctedUsers.map((user) => {
-    
-  //   correctedHobbies.map((hobby) => {
-
-  //     if (user.id === hobby.user_id) {
-  //       console.log(`YES-MATCH | user.id: ${ user.id } | hobby.user_id: ${ hobby.user_id }`);
-  //     } else {
-  //       console.log(`NON-MATCH | user.id: ${ user.id } | hobby.user_id: ${ hobby.user_id } id: ${ hobby.id } name: ${ hobby.name }`);
-  //       // console.log('hobby', hobby);
-  //     }
-
-  //   })
-  // })
 
 })
 
