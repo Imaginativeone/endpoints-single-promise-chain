@@ -26,6 +26,44 @@ const assignmentResult = Promise.all(
     console.log('corrected-user', user);
   });
 
+  console.log('Connect the corrected users to the corrected hobbies');
+  console.log('First, iterate through the hobbies, to see what I have');
+
+  let correctedHobbies = organizedData[1];
+
+  correctedHobbies.map((hobby) => {
+    console.log('corrected-hobby', hobby);
+  })
+
+  // var myFirstObjArray = [{foo: 1, bar: 1}, {foo: 3, bar: 3}, {foo: 4, bar: 5}],
+  // mySecondObjArray = [{foo: 2}, {foo: 4}, {foo: 5}],
+  
+  // firstArray  = myFirstObjArray.filter(o=> !mySecondObjArray.some(i=> i.foo === o.foo));
+  // secondArray = mySecondObjArray.filter(o=> !myFirstObjArray.some(i=> i.foo === o.foo));
+  
+  // console.log(firstArray.map(o=> {return {'foo' :  o.foo}}))
+  // console.log(secondArray.map(o=> {return {'foo' :  o.foo}}))
+  
+  let firstArray  = correctedUsers.filter(o => !correctedHobbies.some(i => i.user_id === o.id));
+  let secondArray = correctedHobbies.filter(o => !correctedUsers.some(i => i.id === o.user_id));
+
+  console.log('firstArray', firstArray);
+  console.log('secondArray', secondArray);
+
+  // correctedUsers.map((user) => {
+    
+  //   correctedHobbies.map((hobby) => {
+
+  //     if (user.id === hobby.user_id) {
+  //       console.log(`YES-MATCH | user.id: ${ user.id } | hobby.user_id: ${ hobby.user_id }`);
+  //     } else {
+  //       console.log(`NON-MATCH | user.id: ${ user.id } | hobby.user_id: ${ hobby.user_id } id: ${ hobby.id } name: ${ hobby.name }`);
+  //       // console.log('hobby', hobby);
+  //     }
+
+  //   })
+  // })
+
 })
 
 function correctUsers(users) {
