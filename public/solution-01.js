@@ -50,6 +50,17 @@ const assignmentResult = Promise.all(
   console.log('Updated Users with no hobbies', firstArray);
   console.log('Updated Hobbies with no users', secondArray);
 
+  let matchedArray = correctedUsers.map(user => {
+    user.hobbies = correctedHobbies.filter((hobby) => {
+      if (user.id === hobby.user_id) {
+        return hobby;
+      }
+    })
+    return user;
+  })
+
+  console.log('Updated Users WITH hobbies', matchedArray);
+
   // correctedUsers.map((user) => {
     
   //   correctedHobbies.map((hobby) => {
