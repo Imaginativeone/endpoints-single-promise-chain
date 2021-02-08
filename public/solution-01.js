@@ -22,18 +22,18 @@ const assignmentResult = Promise.all(
   console.log('Iterate through the corrected users');
   let correctedUsers = organizedData[0];
 
-  correctedUsers.map((user) => {
-    console.log('corrected-user', user);
-  });
+  // correctedUsers.map((user) => {
+  //   console.log('corrected-user', user);
+  // });
 
   console.log('Connect the corrected users to the corrected hobbies');
   console.log('First, iterate through the hobbies, to see what I have');
 
   let correctedHobbies = organizedData[1];
 
-  correctedHobbies.map((hobby) => {
-    console.log('corrected-hobby', hobby);
-  })
+  // correctedHobbies.map((hobby) => {
+  //   console.log('corrected-hobby', hobby);
+  // })
 
   // var myFirstObjArray = [{foo: 1, bar: 1}, {foo: 3, bar: 3}, {foo: 4, bar: 5}],
   // mySecondObjArray = [{foo: 2}, {foo: 4}, {foo: 5}],
@@ -47,8 +47,8 @@ const assignmentResult = Promise.all(
   let firstArray  = correctedUsers.filter(o => !correctedHobbies.some(i => i.user_id === o.id));
   let secondArray = correctedHobbies.filter(o => !correctedUsers.some(i => i.id === o.user_id));
 
-  console.log('firstArray', firstArray);
-  console.log('secondArray', secondArray);
+  console.log('Updated Users with no hobbies', firstArray);
+  console.log('Updated Hobbies with no users', secondArray);
 
   // correctedUsers.map((user) => {
     
