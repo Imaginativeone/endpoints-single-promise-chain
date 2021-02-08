@@ -12,7 +12,21 @@ const assignmentResult = Promise.all(
   return data;
 })
 .then(data => Promise.all([updateUsers(data[0]), updateHobbies(data[1]), updateFavorites(data[2])]))
-.then(updatedData => console.log(updatedData))
+.then((updatedData) => { 
+  console.log(updatedData)
+  return updatedData;
+})
+.then((organizedData) => {
+  console.log('organizedData', organizedData);
+
+  console.log('Iterate through the corrected users');
+  let correctedUsers = organizedData[0];
+
+  correctedUsers.map((user) => {
+    console.log('corrected-user', user);
+  });
+
+})
 
 function correctUsers(users) {
   return users.filter((user) => { 
