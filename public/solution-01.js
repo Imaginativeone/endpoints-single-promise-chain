@@ -13,30 +13,27 @@ const assignmentResult = Promise.all(
 })
 .then(data => Promise.all([updateUsers(data[0]), updateHobbies(data[1]), updateFavorites(data[2])]))
 .then((updatedData) => { 
-  console.log(updatedData)
+  // console.log(updatedData)
   return updatedData;
 })
-.then((organizedData) => {
+.then((orgData) => {
 
-  let hobsnousers = organizedData[1].filter(h => !organizedData[0].some(user => user.id === h.user_id));
-  let favsnousers = organizedData[2].filter(f => !organizedData[0].some(user => user.id === f.user_id));
+  let hobsnousers = orgData[1].filter(h => !orgData[0].some(user => user.id === h.user_id));
+  let favsnousers = orgData[2].filter(f => !orgData[0].some(user => user.id === f.user_id));
 
-  organizedData[0].map((user) => {
+  orgData[0].map((user) => {
     user.user_id = user.id;
     return user;
   })
   
-  let users_hobs = organizedData[0].map(user => {
-    user.hobbies = organizedData[1].filter(hobby => hobby.user_id === user.id)
+  let users_hobs = orgData[0].map(user => {
+    user.hobbies = orgData[1].filter(hobby => hobby.user_id === user.id)
     return user;
   })
   
-  console.log('users_hobs', users_hobs);
-  
-  let users_favs = organizedData[0].map((user) => { 
-    user.favorites = organizedData[2].filter(favorite => { 
+  let users_favs = orgData[0].map((user) => { 
+    user.favorites = orgData[2].filter(favorite => { 
       if (user.id == favorite.user_id) {
-        console.log(`${ user.id } equals ${ favorite.user_id }`);
         user.favorites = favorite;
         return favorite;
       }
@@ -44,28 +41,14 @@ const assignmentResult = Promise.all(
     return user;
   })
 
-  const combo = users_hobs.concat(hobsnousers, favsnousers);
+  const organizedData = users_hobs.concat(hobsnousers, favsnousers);
   
-  console.log('combo', combo);
-
-  combo.forEach((item) => {
-
-    if (item.user_id) {
-      console.log(`NON USER ${ item.user_id }`);
-    } else {
-      console.log('user', item);
-    }
-
-  })
-
-  // let present = combo;
-  
-  combo.sort((a, b) => {
+  organizedData.sort((a, b) => {
       return a.user_id - b.user_id;
     }
   );
 
-  console.log(combo);
+  console.log(organizedData); // Output
 
 })
 
