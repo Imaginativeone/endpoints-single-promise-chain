@@ -18,26 +18,12 @@ const assignmentResult = Promise.all(
 })
 .then((organizedData) => {
 
-  console.log('organizedData', organizedData);
+  let hobsnousers = organizedData[1].filter(h => !organizedData[0].some(user => user.id === h.user_id));
+  let favsnousers = organizedData[2].filter(f => !organizedData[0].some(user => user.id === f.user_id));
+  
+  let usersWithHobbies = organizedData[0].map(user => {
 
-  console.log('Iterate through the corrected users');
-  
-  console.log('Connect the corrected users to the corrected hobbies');
-  console.log('First, iterate through the hobbies, to see what I have');
-  
-  let correctedUsers        = organizedData[0];
-  let correctedHobbies      = organizedData[1];
-  let correctedFavorites    = organizedData[2];
-
-  let hobbiesWithoutUsers   = correctedHobbies  .filter(h => !correctedUsers.some(user => user.id === h.user_id));
-  let favoritesWithoutUsers = correctedFavorites.filter(f => !correctedUsers.some(user => user.id === f.user_id));
-  
-  console.log('Updated Hobbies with no users', hobbiesWithoutUsers);
-  console.log('Updated Favorites with no users', favoritesWithoutUsers);
-  
-  let usersWithHobbies = correctedUsers.map(user => {
-
-    user.hobbies = correctedHobbies.filter((hobby) => {
+    user.hobbies = organizedData[1].filter((hobby) => {
       if (user.id === hobby.user_id) {
         return hobby;
       }
@@ -49,13 +35,13 @@ const assignmentResult = Promise.all(
   
   let usersWithHobbiesAndFavorites = usersWithHobbies.map((user) => { 
     user.user_id = user.id;
-    user.favorites = correctedFavorites.filter(favorite => {user.id === favorite.user_id })
+    user.favorites = organizedData[2].filter(favorite => {user.id === favorite.user_id })
     return user;
   })
 
   console.log('Updated Users with hobbies and favorites', usersWithHobbiesAndFavorites);
 
-  let totalArray = usersWithHobbiesAndFavorites.concat(hobbiesWithoutUsers).concat(favoritesWithoutUsers);
+  let totalArray = usersWithHobbiesAndFavorites.concat(hobsnousers).concat(favsnousers);
   
   totalArray.sort(
     function (a, b) {
