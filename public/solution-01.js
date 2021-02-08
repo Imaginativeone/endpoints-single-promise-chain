@@ -21,40 +21,25 @@ const assignmentResult = Promise.all(
   let hobsnousers = organizedData[1].filter(h => !organizedData[0].some(user => user.id === h.user_id));
   let favsnousers = organizedData[2].filter(f => !organizedData[0].some(user => user.id === f.user_id));
   
-  let usersWithHobbies = organizedData[0].map(user => {
-
-    user.hobbies = organizedData[1].filter((hobby) => {
-      if (user.id === hobby.user_id) {
-        return hobby;
-      }
-    })
+  let users_hobs = organizedData[0].map(user => {
+    user.hobbies = organizedData[1].filter(hobby => hobby.user_id === user.id)
     return user;
   })
   
-  console.log('Updated Users WITH hobbies', usersWithHobbies);
-  
-  let usersWithHobbiesAndFavorites = usersWithHobbies.map((user) => { 
+  let users_hobs_favs = users_hobs.map((user) => { 
     user.user_id = user.id;
     user.favorites = organizedData[2].filter(favorite => {user.id === favorite.user_id })
     return user;
   })
-
-  console.log('Updated Users with hobbies and favorites', usersWithHobbiesAndFavorites);
-
-  let totalArray = usersWithHobbiesAndFavorites.concat(hobsnousers).concat(favsnousers);
   
-  totalArray.sort(
-    function (a, b) {
+  let present = users_hobs_favs.concat(hobsnousers).concat(favsnousers);
+  
+  present.sort((a, b) => {
       return a.user_id - b.user_id;
     }
   );
 
-  // sort by value
-  // items.sort(function (a, b) {
-  //   return a.value - b.value;
-  // });
-
-  console.log(totalArray);
+  console.log(present);
 
 })
 
