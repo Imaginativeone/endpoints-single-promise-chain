@@ -40,16 +40,72 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       return user;
     })
 
-    const organizedData = users_hobs.concat(hobsnousers, favsnousers);
+    const organizedData = users_hobs.concat(simParents(hobsnousers, 'hobbies'), simParents(favsnousers, 'favorites'));
+    
+    // organizedData.sort((a, b) => {
+    //     return a.user_id - b.user_id;
+    //   }
+    // );
     
     organizedData.sort((a, b) => {
-        return a.user_id - b.user_id;
+        return a.id - b.id;
       }
     );
 
     console.log(organizedData); // Output
+    
+    const hf = combo(hobsnousers, favsnousers);
 
   })
+
+  function combo(h, f) {
+
+    const ph = simParents(h, 'hobbies');
+    const pf = simParents(f, 'favorites');
+
+    let hobbyArray = [];
+    let hobbiesArray = [];
+    let favoritesArray = [];
+
+    console.log (ph, pf);
+
+    const simUser = [{
+      hobbies: hobbyArray,
+      favorites: favoritesArray
+    }]
+    
+    ph.map((hobby) => {
+      
+      simUser.id = hobby.id;
+      simUser.hobbies = hobbyArray;
+
+      
+      hobbyArray.push(hobby);
+      
+      pf.map((favorite) => {
+        
+        simUser.favorites = favoritesArray;
+        favoritesArray.push(favorite);
+        favoritesArray = [];
+        
+        
+      })
+      console.log('simUser', simUser);
+      hobbyArray = [];
+    })
+
+  }
+  
+  function simParents(children, childName) {
+    return children.reduce(function(parents, child, i) {
+      const parent = {
+        id: children[i]['user_id'],
+        [childName]: child
+      };
+      parents[i] = parent;
+      return parents;
+    }, []);
+  }
 
   function tryUrl(url, data, method='get') {    
     return fetch(url, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) || null })
