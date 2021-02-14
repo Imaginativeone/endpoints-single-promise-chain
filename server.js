@@ -47,7 +47,11 @@ server.get('/reset', (req, res) => {
   data = initialData;
 });
 
-server.listen(port, () => {
+server.listen(port, (err) => {
+
+  if (err) {
+    console.log(err)
+  }
   console.log(`Server listening at ${port}`);
 });
 

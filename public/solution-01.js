@@ -1,15 +1,49 @@
 Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 .then((data) => {
-  data[0] = correctUsers(data[0])
-  data[1] = correctHobbies(data[1]),
-  data[2] = correctFavorites(data[2])
+
+  console.log(data);
+  // We want to map through the first array, which is data[0]
+  
+  const hobbies = data[1];
+  
+  const users = data[0].map((user, i) => {
+    
+    user.hobbies = data[1].filter((hobby) => {
+
+      return hobby.user_id == user.id;
+
+    })
+
+    return user;
+    // return user;
+    // return data[1][i].user_id === user.id
+
+  })
+  console.log('users', users);
+  // const hobbies_not_connected_to_users = data[1].filter((hobs, i, all_hobs) => { // hobbies not connected to users
+
+  //   // We want to find where hobs.user_id !== user.id
+  //   console.log('users[i]', users[i]);
+  //   console.log('hobs', hobs);
+  //   // return hobs.user_id === users[i].id;
+  //   // return hobs;
+
+  // })
+  // console.log('Hello World');
+  // console.log('hobbies_not_connected_to_users', hobbies_not_connected_to_users);
+
+  // data[0] = correctUsers(data[0])
+  // data[1] = correctHobbies(data[1]),
+  // data[2] = correctFavorites(data[2])
   return data;
 })
 .then(data => Promise.all(
-  [
-    tryUrl('/updateUsers', data[0], 'post'), 
-    tryUrl('/updateHobbies', data[1], 'post'), 
-    tryUrl('/updateFavorites', data[2],  'post')]))
+  // [
+    // tryUrl('/updateUsers', data[0], 'post'), 
+    // tryUrl('/updateHobbies', data[1], 'post'), 
+    // tryUrl('/updateFavorites', data[2],  'post')]
+    )
+  )
 
   .then(updatedData => { 
     // console.log(updatedData)
@@ -17,44 +51,48 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
   })
   .then((orgData) => {
 
-    let hobsnousers = orgData[1].filter(h => !orgData[0].some(user => user.id === h.user_id));
-    let favsnousers = orgData[2].filter(f => !orgData[0].some(user => user.id === f.user_id));
+    // console.log('orgData', orgData);
 
-    orgData[0].map((user) => {
-      user.user_id = user.id;
-      return user;
-    })
-    
-    let users_hobs = orgData[0].map(user => {
-      user.hobbies = orgData[1].filter(hobby => hobby.user_id === user.id)
-      return user;
-    })
-    
-    let users_favs = orgData[0].map((user) => { 
-      user.favorites = orgData[2].filter(favorite => { 
-        if (user.id == favorite.user_id) {
-          user.favorites = favorite;
-          return favorite;
-        }
-      })
-      return user;
-    })
+    // let hobsnousers = orgData[1].filter(h => !orgData[0].some(user => user.id === h.user_id));
+    // let favsnousers = orgData[2].filter(f => !orgData[0].some(user => user.id === f.user_id));
 
-    const organizedData = users_hobs.concat(simParents(hobsnousers, 'hobbies'), simParents(favsnousers, 'favorites'));
+    // const justUsers = orgData[0].map((user) => {
+    //   user.user_id = user.id;
+    //   return user;
+    // })
+
+    // console.log('justUsers', justUsers);
+
+    // let users_hobs = orgData[0].map(user => {
+    //   user.hobbies = orgData[1].filter(hobby => hobby.user_id === user.id)
+    //   return user;
+    // })
+    // console.log('users_hobs', users_hobs);
+    // let users_favs = orgData[0].map((user) => { 
+    //   user.favorites = orgData[2].filter(favorite => { 
+    //     if (user.id == favorite.user_id) {
+    //       user.favorites = favorite;
+    //       return favorite;
+    //     }
+    //   })
+    //   return user;
+    // })
+
+    // const organizedData = users_hobs.concat(simParents(hobsnousers, 'hobbies'), simParents(favsnousers, 'favorites'));
+    
+    // // organizedData.sort((a, b) => {
+    // //     return a.user_id - b.user_id;
+    // //   }
+    // // );
     
     // organizedData.sort((a, b) => {
-    //     return a.user_id - b.user_id;
+    //     return a.id - b.id;
     //   }
     // );
-    
-    organizedData.sort((a, b) => {
-        return a.id - b.id;
-      }
-    );
 
-    console.log(organizedData); // Output
+    // console.log(organizedData); // Output
     
-    const hf = combo(hobsnousers, favsnousers);
+    // const hf = combo(hobsnousers, favsnousers);
 
   })
 
