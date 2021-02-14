@@ -1,38 +1,29 @@
 Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 .then((data) => {
 
-  console.log(data);
+  console.log('First data', data);
   // We want to map through the first array, which is data[0]
   
   const hobbies = data[1];
   
-  data[0].forEach((user, i) => {
+  // data[0].forEach((user, i) => {
     
-    user.hobbies = data[1].filter((hobby) => {
-      return hobby.user_id === user.id;
-    })
+  //   user.hobbies = data[1].filter((hobby) => {
+  //     return hobby.user_id === user.id;
+  //   })
 
-    user.favorites = data[2].filter((favorite) => {
-      return favorite.user_id === user.id;
-    })
-
-  })
-
-  // const hobbies_not_connected_to_users = data[1].filter((hobs, i, all_hobs) => { // hobbies not connected to users
-
-  //   // We want to find where hobs.user_id !== user.id
-  //   console.log('users[i]', users[i]);
-  //   console.log('hobs', hobs);
-  //   // return hobs.user_id === users[i].id;
-  //   // return hobs;
+  //   user.favorites = data[2].filter((favorite) => {
+  //     return favorite.user_id === user.id;
+  //   })
 
   // })
-  // console.log('Hello World');
-  // console.log('hobbies_not_connected_to_users', hobbies_not_connected_to_users);
 
   data[0] = correctUsers(data[0], 'PA')
   data[1] = correctHobbies(data[1]),
   data[2] = correctFavorites(data[2])
+
+  console.log('corrected data', data);
+
   return data;
 })
 .then(data => Promise.all(
@@ -40,13 +31,20 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     tryUrl('/updateUsers', data[0], 'post'), 
     tryUrl('/updateHobbies', data[1], 'post'), 
     tryUrl('/updateFavorites', data[2],  'post')
-  ]
-))
-  .then(updatedData => { 
-    console.log('updatedData', updatedData)
+  ]))
+  .then(updatedData => {
+    console.log('updatedData', updatedData);
     return updatedData;
   })
-  .then((orgData) => {
+  .then((data) => {
+
+    data[0].forEach((user) => {
+
+      user.hobbies = data[1].filter((hobby) => {
+        return hobby.user_id === user.id;
+      })
+
+    });
 
   })
 
