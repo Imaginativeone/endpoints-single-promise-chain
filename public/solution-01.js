@@ -17,7 +17,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     })
 
   })
-  
+
   // const hobbies_not_connected_to_users = data[1].filter((hobs, i, all_hobs) => { // hobbies not connected to users
 
   //   // We want to find where hobs.user_id !== user.id
@@ -39,99 +39,17 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
   [
     tryUrl('/updateUsers', data[0], 'post'), 
     tryUrl('/updateHobbies', data[1], 'post'), 
-    tryUrl('/updateFavorites', data[2],  'post')]
-    )
-  )
-
+    tryUrl('/updateFavorites', data[2],  'post')
+  ]
+))
   .then(updatedData => { 
-    // console.log(updatedData)
+    console.log('updatedData', updatedData)
     return updatedData;
   })
   .then((orgData) => {
 
-    // console.log('orgData', orgData);
-
-    // let hobsnousers = orgData[1].filter(h => !orgData[0].some(user => user.id === h.user_id));
-    // let favsnousers = orgData[2].filter(f => !orgData[0].some(user => user.id === f.user_id));
-
-    // const justUsers = orgData[0].map((user) => {
-    //   user.user_id = user.id;
-    //   return user;
-    // })
-
-    // console.log('justUsers', justUsers);
-
-    // let users_hobs = orgData[0].map(user => {
-    //   user.hobbies = orgData[1].filter(hobby => hobby.user_id === user.id)
-    //   return user;
-    // })
-    // console.log('users_hobs', users_hobs);
-    // let users_favs = orgData[0].map((user) => { 
-    //   user.favorites = orgData[2].filter(favorite => { 
-    //     if (user.id == favorite.user_id) {
-    //       user.favorites = favorite;
-    //       return favorite;
-    //     }
-    //   })
-    //   return user;
-    // })
-
-    // const organizedData = users_hobs.concat(simParents(hobsnousers, 'hobbies'), simParents(favsnousers, 'favorites'));
-    
-    // // organizedData.sort((a, b) => {
-    // //     return a.user_id - b.user_id;
-    // //   }
-    // // );
-    
-    // organizedData.sort((a, b) => {
-    //     return a.id - b.id;
-    //   }
-    // );
-
-    // console.log(organizedData); // Output
-    
-    // const hf = combo(hobsnousers, favsnousers);
-
   })
 
-  function combo(h, f) {
-
-    const ph = simParents(h, 'hobbies');
-    const pf = simParents(f, 'favorites');
-
-    let hobbyArray = [];
-    let hobbiesArray = [];
-    let favoritesArray = [];
-
-    console.log (ph, pf);
-
-    const simUser = [{
-      hobbies: hobbyArray,
-      favorites: favoritesArray
-    }]
-    
-    ph.map((hobby) => {
-      
-      simUser.id = hobby.id;
-      simUser.hobbies = hobbyArray;
-
-      
-      hobbyArray.push(hobby);
-      
-      pf.map((favorite) => {
-        
-        simUser.favorites = favoritesArray;
-        favoritesArray.push(favorite);
-        favoritesArray = [];
-        
-        
-      })
-      console.log('simUser', simUser);
-      hobbyArray = [];
-    })
-
-  }
-  
   function simParents(children, childName) {
     return children.reduce(function(parents, child, i) {
       const parent = {
@@ -143,7 +61,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     }, []);
   }
 
-  function tryUrl(url, data, method='get') {    
+  function tryUrl(url, data, method='get') { 
     return fetch(url, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) || null })
     .then(res => res.json())
   }
