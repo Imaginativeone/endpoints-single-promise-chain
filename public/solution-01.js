@@ -6,20 +6,18 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
   
   const hobbies = data[1];
   
-  const users = data[0].map((user, i) => {
+  data[0].forEach((user, i) => {
     
     user.hobbies = data[1].filter((hobby) => {
-
-      return hobby.user_id == user.id;
-
+      return hobby.user_id === user.id;
     })
 
-    return user;
-    // return user;
-    // return data[1][i].user_id === user.id
+    user.favorites = data[2].filter((favorite) => {
+      return favorite.user_id === user.id;
+    })
 
   })
-  console.log('users', users);
+  
   // const hobbies_not_connected_to_users = data[1].filter((hobs, i, all_hobs) => { // hobbies not connected to users
 
   //   // We want to find where hobs.user_id !== user.id
@@ -32,16 +30,16 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
   // console.log('Hello World');
   // console.log('hobbies_not_connected_to_users', hobbies_not_connected_to_users);
 
-  // data[0] = correctUsers(data[0])
-  // data[1] = correctHobbies(data[1]),
-  // data[2] = correctFavorites(data[2])
+  data[0] = correctUsers(data[0], 'PA')
+  data[1] = correctHobbies(data[1]),
+  data[2] = correctFavorites(data[2])
   return data;
 })
 .then(data => Promise.all(
-  // [
-    // tryUrl('/updateUsers', data[0], 'post'), 
-    // tryUrl('/updateHobbies', data[1], 'post'), 
-    // tryUrl('/updateFavorites', data[2],  'post')]
+  [
+    tryUrl('/updateUsers', data[0], 'post'), 
+    tryUrl('/updateHobbies', data[1], 'post'), 
+    tryUrl('/updateFavorites', data[2],  'post')]
     )
   )
 
@@ -150,10 +148,10 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     .then(res => res.json())
   }
   
-  function correctUsers(users) {
+  function correctUsers(users, state) {
     return users.filter((user) => { 
       if (!user.state) {
-        user.state = "PA"
+        user.state = state;
         return user;
       }
     })
