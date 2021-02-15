@@ -85,7 +85,9 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       return true;
 
     })
-    .sort()
+    .sort((a, b) => {
+      return a.id - b.id;
+    })
 
     console.log('orgData: data', data);
 
