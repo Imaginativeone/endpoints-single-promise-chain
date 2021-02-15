@@ -55,7 +55,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       // Take the first object in the array called data
       if (element.infotype === 'updatedUser') {
 
-        genObject = {
+        genObject[element.id] = {
           id: element.id,
           last_updated: element.last_modified,
         }
@@ -63,36 +63,36 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         // TODO: ternary operator
         if (element.hobbies.length < 1) {
         } else {
-          genObject.hobbies = element.hobbies;
+          genObject[element.id].hobbies = element.hobbies;
         }
 
         // TODO: ternary operator
         if (element.favorites.length < 1) {
         } else {
-          genObject.favorites = element.favorites;
+          genObject[element.id].favorites = element.favorites;
         }
 
         // console.log('updated user');
-        console.log('genObject', genObject);
+        console.log('genObject', genObject[element.id]);
 
       }
 
       if (element.infotype === 'updatedHobby') {
-        genObject = {
+        genObject[element.user_id] = {
           id: element.user_id,
           hobbies: element
         }
         // console.log('updated hobby');
-        console.log('genObject', genObject);
+        console.log('genObject', genObject[element.user_id]);
 
       }
       if (element.infotype === 'updatedFavorite') {
-        genObject = {
+        genObject[element.user_id] = {
           id: element.user_id,
           favorites: element
         }
         // console.log('updated favorite');
-        console.log('genObject', genObject);
+        console.log('genObject', genObject[element.user_id]);
       }
       
       // console.log('object', object);
