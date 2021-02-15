@@ -1,7 +1,7 @@
 Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 .then((data) => {
 
-  console.log('First data', data);
+  // console.log('First data', data);
   
   const hobbies = data[1];
 
@@ -9,7 +9,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
   data[1] = correctHobbies(data[1]),
   data[2] = correctFavorites(data[2])
 
-  console.log('corrected data', data);
+  // console.log('corrected data', data);
 
   return data;
 })
@@ -20,7 +20,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     tryUrl('/updateFavorites', data[2],  'post')
   ]))
   .then(updatedData => {
-    console.log('updatedData', updatedData);
+    // console.log('updatedData', updatedData);
     return updatedData;
   })
   .then((data) => {
@@ -40,19 +40,28 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     const hobs = simParents(orgData[1], 'hobbies');
     const favs = simParents(orgData[2], 'favorites');
 
+    const allData = usrs.concat(hobs, favs);
+
     console.log('hobs', hobs);
 
     let seen = {};
-    data = orgData.filter(function(entry) {
+    data = allData.filter(function(entry) {
 
       let previous;
 
       console.log('entry', entry);
+      // console.log('entry.label', entry.label);
+      // console.log('entry.id', entry.id);
+
+      console.log('previous', previous);
+      console.log('seen', seen);
 
       // Have we seen this label before?
-      if (seen.hasOwnProperty(entry.label)) {
+      if (seen.hasOwnProperty(entry.id)) {
 
         // Yes, grab it and add this data to it
+        previous = seen[entry.id];
+        previous.data.push(entry.data);
 
       }
 
