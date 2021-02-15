@@ -48,8 +48,6 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     const data = usrs.concat(hobs, favs);
     console.log('combined data', data);
 
-    let object = {};
-    let type;
     let genObject = {};
 
     let result = data.reduce((accumulator, element) => {
@@ -60,17 +58,41 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         genObject = {
           id: element.id,
           last_updated: element.last_modified,
-          content: element,
-          hobbies: element.hobbies
         }
+
+        // TODO: ternary operator
+        if (element.hobbies.length < 1) {
+        } else {
+          genObject.hobbies = element.hobbies;
+        }
+
+        // TODO: ternary operator
+        if (element.favorites.length < 1) {
+        } else {
+          genObject.favorites = element.favorites;
+        }
+
         // console.log('updated user');
         console.log('genObject', genObject);
+
       }
+
       if (element.infotype === 'updatedHobby') {
+        genObject = {
+          id: element.user_id,
+          hobbies: element
+        }
         // console.log('updated hobby');
+        console.log('genObject', genObject);
+
       }
       if (element.infotype === 'updatedFavorite') {
+        genObject = {
+          id: element.user_id,
+          favorites: element
+        }
         // console.log('updated favorite');
+        console.log('genObject', genObject);
       }
       
       // console.log('object', object);
