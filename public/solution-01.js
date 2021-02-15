@@ -39,16 +39,27 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     console.log('orgData', orgData);
 
     const usrs = orgData[0];
-    const hobs = orgData[1];
-    const favs = orgData[2];
+    const hobs = simParents(orgData[1], 'hobbies');
+    const favs = simParents(orgData[2], 'favorites');
 
     const comb = usrs.concat(hobs, favs);
     console.log('combined data', comb);
 
-    let seen = new Map();
+    let seen = new Map(); // let seen = {};
 
     const organizedData = comb.filter((entry) => {
 
+      let previous = [];
+
+      if (seen.hasOwnProperty(entry.id)) {
+
+        console.log('I have seen id: ' + entry.id + ' before');
+        return false;
+
+      }
+
+      seen[entry.id] = entry;
+      
       return true;
 
     })
