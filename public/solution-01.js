@@ -45,32 +45,30 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     const comb = usrs.concat(hobs, favs);
     console.log('combined data', comb);
 
-    let seen = new Map(); // let seen = {};
+    let o = {};
+    let result = comb.reduce((r, el) => {
 
-    const organizedData = comb.filter((entry) => {
+      let e = el.id;
+      console.log('e', e);
 
-      let previous = [];
+      if (!o[e]) {
+        console.log('A');
 
-      // Have we seen this id before?
-      if (seen.hasOwnProperty(entry.id)) {
+        o[e] = {
+          id: el.id,
+          name: el.name,
+          message: []
+        }
 
-        // Acknowledgement
-        console.log('I have seen id: ' + entry.id + ' before');
+        console.log('o', o);
 
-        // Yes, grab it and add this data to it
-        previous = seen[entry.id];
-        console.log('previous', previous);
-
-        return false;
-
+      } else {
+        console.log('B');
       }
 
-      seen[entry.id] = entry;
-      
-      return true;
+    }, []);
 
-    })
-    .sort((a, b) => a.id-b.id);
+    // .sort((a, b) => a.id-b.id);
 
     console.log('organizedData', organizedData);
 
