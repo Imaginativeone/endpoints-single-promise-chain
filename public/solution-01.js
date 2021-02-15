@@ -45,25 +45,47 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     console.log('hobs', hobs);
 
     let seen = {};
+
     data = allData.filter(function(entry) {
 
       let previous;
 
-      console.log('entry', entry);
+      // console.log('entry', entry);
       // console.log('entry.label', entry.label);
       // console.log('entry.id', entry.id);
 
-      console.log('previous', previous);
-      console.log('seen', seen);
+      // console.log('previous', previous);
+      // console.log('seen', seen);
 
       // Have we seen this label before?
       if (seen.hasOwnProperty(entry.id)) {
 
+        console.log('seen.hasOwnProperty', seen.hasOwnProperty(entry.id));
+
         // Yes, grab it and add this data to it
         previous = seen[entry.id];
-        previous.data.push(entry.data);
+        console.log('previous = seen[entry.id]', previous);
+
+        let entryProperties = Object.getOwnPropertyNames(entry);
+
+        console.log('entryProperties', entryProperties);
+
+        let data = entryProperties[1];
+
+        entry.data = data;
+
+        console.log('entryProperties[1]', data);
+        console.log('entry.data', entry.data);
+
+        console.log('new properties', Object.getOwnPropertyNames(entry));
+
+        return false;
 
       }
+
+      seen[entry.id] = entry;
+
+      return true;
 
     })
 
