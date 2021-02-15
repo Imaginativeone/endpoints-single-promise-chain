@@ -38,50 +38,78 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
     console.log('orgData', orgData);
 
-    const usrs = orgData[0];
-    const hobs = simParents(orgData[1], 'hobbies');
-    const favs = simParents(orgData[2], 'favorites');
+    const usrs = addTypeFlag(orgData[0], 'updatedUser');
+    // const hobs = simParents(orgData[1], 'hobby');
+    // const favs = simParents(orgData[2], 'favorite');
 
-    const comb = usrs.concat(hobs, favs);
-    console.log('combined data', comb);
+    const hobs = addTypeFlag(orgData[1], 'updatedHobby');
+    const favs = addTypeFlag(orgData[2], 'updatedFavorite');
 
-    let o = {};
-    let result = comb.reduce((r, el) => {
+    const data = usrs.concat(hobs, favs);
+    console.log('combined data', data);
 
-      let e = el.id;
-      console.log('e', e);
+    let object = {};
+    let type;
+    let genObject = {};
 
-      if (!o[e]) {
-        console.log('A');
+    let result = data.reduce((accumulator, element) => {
 
-        o[e] = {
-          id: el.id,
-          name: el.name,
-          message: []
+      // Take the first object in the array called data
+      if (element.infotype === 'updatedUser') {
+
+        genObject = {
+          id: element.id,
+          last_updated: element.last_modified,
+          content: element,
+          hobbies: element.hobbies
         }
-
-        console.log('o', o);
-
-      } else {
-        console.log('B');
+        // console.log('updated user');
+        console.log('genObject', genObject);
       }
+      if (element.infotype === 'updatedHobby') {
+        // console.log('updated hobby');
+      }
+      if (element.infotype === 'updatedFavorite') {
+        // console.log('updated favorite');
+      }
+      
+      // console.log('object', object);
+
+      return accumulator;
 
     }, []);
 
     // .sort((a, b) => a.id-b.id);
 
-    console.log('organizedData', organizedData);
+    // console.log('organizedData', organizedData);
+
+    console.log('result', result);
+    console.log('orgData', orgData);
 
   })
 
+  function addTypeFlag(array, type) {
+    array.map((item) => {      
+      item.infotype = type;
+    });
+    return array;
+  }
+
   function simParents(children, childName) {
+
     return children.reduce(function(parents, child, i) {
+
+      // console.log('simParents: child', child);
+
       const parent = {
         id: children[i]['user_id'],
         [childName]: child
       };
-      parents[i] = parent;
+
+      // parents[i] = parent;
+      parents.push(parent);
       return parents;
+
     }, []);
   }
 
