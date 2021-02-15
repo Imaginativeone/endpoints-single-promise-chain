@@ -36,54 +36,33 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
   })
   .then((orgData) => {
 
-    console.log('orgData', orgData);
-    parentUserArray = [];
+    const usrs = orgData[0];
+    const hobs = simParents(orgData[1], 'hobbies');
+    const favs = simParents(orgData[2], 'favorites');
 
-    orgData[0].forEach((arrayElement, i) => {
+    console.log('hobs', hobs);
 
-      // Create a Parent-set of users
-      // Apply a Parent-set of users
-      const parentUser = {};
-      console.log('arrayElement', arrayElement);
-      
-      // If the element is an updated non-simulated user do this
-      if (!arrayElement.user_id) { // non-simulated users
-        
-        // Parent-set-user gets the id
-        parentUser.id = arrayElement.id;
-        // console.log('parentUser.id', parentUser.id);
+    let seen = {};
+    data = orgData.filter(function(entry) {
 
-        parentUser.name = arrayElement.name;
+      let previous;
 
-        parentUser.last_updated = arrayElement.last_modified;
+      console.log('entry', entry);
 
-        // Parent-set-user gets the hobbies (array)
-        parentUser.hobbies = arrayElement.hobbies;
-        // console.log('parentUser.hobbies', parentUser.hobbies);
-        
-        // Parent-set-user gets the favorites (array)
-        parentUser.favorites = arrayElement.favorites;
-        // console.log('parentUser.favorites', parentUser.favorites);
+      // Have we seen this label before?
+      if (seen.hasOwnProperty(entry.label)) {
 
-        // Add this parentUser to a collection
-        parentUserArray.push(parentUser);
-        // console.log('parentUserArray: unit', parentUserArray);
-
-      } else { // simulated users
-
-        // console.log('arrayElement', arrayElement[i], i);
+        // Yes, grab it and add this data to it
 
       }
-    });
 
-    console.log('parentUserArray', parentUserArray);
+    })
 
-    // If the element is an updated simulated user, do this
-      // Parent-set-user gets the user_id
-      // Parent-set-user gets the hobbies (array)
-        // If the item(s) in this array appear in the non-simulated user's hobbies array, then skip
-      // Parent-set-user gets the favorites (array)
-        // If the item(s) in this array appear in the non-simulated user's favorites array, then skip
+    console.log('orgData: data', data);
+
+    // console.log('ph', ph);
+    console.log('hello', orgData);
+
   })
 
   function simParents(children, childName) {
