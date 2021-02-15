@@ -36,63 +36,25 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
   })
   .then((orgData) => {
 
+    console.log('orgData', orgData);
+
     const usrs = orgData[0];
-    const hobs = simParents(orgData[1], 'hobbies');
-    const favs = simParents(orgData[2], 'favorites');
-    const allData = usrs.concat(hobs, favs);
-    console.log('hobs', hobs);
-    
-    let seen = new Map(); // let seen = {};
+    const hobs = orgData[1];
+    const favs = orgData[2];
 
-    data = allData.filter(function(entry) {
+    const comb = usrs.concat(hobs, favs);
+    console.log('combined data', comb);
 
-      let previous = [];
+    let seen = new Map();
 
-      // console.log('entry', entry);
-      // console.log('entry.label', entry.label);
-      // console.log('entry.id', entry.id);
+    const organizedData = comb.filter((entry) => {
 
-      // console.log('previous', previous);
-      // console.log('seen', seen);
-
-      // Have we seen this label before?
-      if (seen.hasOwnProperty(entry.id)) {
-
-        // console.log('seen.hasOwnProperty', seen.hasOwnProperty(entry.id));
-
-        // Yes, grab it and add this data to it
-        previous = seen[entry.id];
-        
-        let entryProperty = Object.getOwnPropertyNames(entry)[1];
-        entry[entryProperty] = entryProperty;
-
-        previous[entryProperty].push(entry[entryProperty]);
-
-        // console.log('entry[entryProperty]', entry[entryProperty]);
-        // console.log("Properties of 'entry'",    Object.getOwnPropertyNames(entry));
-        // console.log("Properties of 'previous'", Object.getOwnPropertyNames(previous));
-        console.log('previous', previous);
-        console.log('previous[entryProperty]', previous[entryProperty]);
-
-        return false;
-
-      }
-
-      // Remember that we've seen it
-      seen[entry.id] = entry;
-
-      // Keep this one, we'll merge any others that match into it
       return true;
 
     })
-    .sort((a, b) => {
-      return a.id - b.id;
-    })
+    .sort((a, b) => a.id-b.id);
 
-    console.log('orgData: data', data);
-
-    // console.log('ph', ph);
-    console.log('hello', orgData);
+    console.log('organizedData', organizedData);
 
   })
 
