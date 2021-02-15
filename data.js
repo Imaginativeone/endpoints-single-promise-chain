@@ -20,9 +20,11 @@ exports.hobbies = [
   {"id":30,"user_id":3,"name":"golf","years_played":1,"experience":"beginner","last_modified":""},
   {"id":40,"user_id":4,"name":"golf","years_played":1,"experience":"beginner","last_modified":""},
   {"id":41,"user_id":4,"name":"knitting","years_played":2,"experience":"","last_modified":""},
+  
   {"id":50,"user_id":5,"name":"golf","years_played":1,"experience":"beginner","last_modified":""},
   {"id":51,"user_id":5,"name":"knitting","years_played":2,"experience":"advanced","last_modified":""},
   {"id":52,"user_id":5,"name":"kayaking","years_played":3,"experience":"","last_modified":""},
+
   {"id":60,"user_id":6,"name":"golf","years_played":1,"experience":"beginner","last_modified":""},
   {"id":70,"user_id":7,"name":"golf","years_played":1,"experience":"","last_modified":""},
   {"id":71,"user_id":7,"name":"knitting","years_played":2,"experience":"advanced","last_modified":""},
@@ -45,8 +47,10 @@ exports.favorites = [
   {"id":32,"user_id":3,"name":"Rick & Morty","type":"tv","last_modified":""},
   {"id":33,"user_id":3,"name":"Dethlok","type":"","last_modified":""},
   {"id":40,"user_id":4,"name":"Mad Max","type":"movie","last_modified":""},
+
   {"id":50,"user_id":5,"name":"Mad Max","type":"movie","last_modified":""},
   {"id":51,"user_id":5,"name":"Legend of Zelda","type":"game","last_modified":""},
+  
   {"id":60,"user_id":6,"name":"Mad Max","type":"movie","last_modified":""},
   {"id":61,"user_id":6,"name":"Legend of Zelda","type":"game","last_modified":""},
   {"id":62,"user_id":6,"name":"Ice cream","type":"","last_modified":""},
