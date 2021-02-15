@@ -60,24 +60,24 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       // Have we seen this label before?
       if (seen.hasOwnProperty(entry.id)) {
 
-        console.log('seen.hasOwnProperty', seen.hasOwnProperty(entry.id));
+        // console.log('seen.hasOwnProperty', seen.hasOwnProperty(entry.id));
 
         // Yes, grab it and add this data to it
         previous = seen[entry.id];
         console.log('previous = seen[entry.id]', previous);
-
+        
+        
         let entryProperties = Object.getOwnPropertyNames(entry);
-
-        console.log('entryProperties', entryProperties);
-
-        let data = entryProperties[1];
-
-        entry.data = data;
-
-        console.log('entryProperties[1]', data);
-        console.log('entry.data', entry.data);
-
-        console.log('new properties', Object.getOwnPropertyNames(entry));
+        // console.log('entryProperties', entryProperties);
+        
+        let entryProperty = entryProperties[1];
+        entry.entryProperty = entryProperty;
+        
+        console.log('entryProperties[1]', entryProperty);
+        console.log('entry.entryProperty', entry[entryProperty]);
+        // console.log('new properties', Object.getOwnPropertyNames(entry));
+        
+        console.log('allData', allData);
 
         return false;
 
