@@ -68,10 +68,11 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
         previous[entryProperty].push(entry[entryProperty]);
 
-        console.log('entry[entryProperty]', entry[entryProperty]);
-        console.log("Properties of 'entry'",    Object.getOwnPropertyNames(entry));
-        console.log("Properties of 'previous'", Object.getOwnPropertyNames(previous));
+        // console.log('entry[entryProperty]', entry[entryProperty]);
+        // console.log("Properties of 'entry'",    Object.getOwnPropertyNames(entry));
+        // console.log("Properties of 'previous'", Object.getOwnPropertyNames(previous));
         console.log('previous', previous);
+        console.log('previous[entryProperty]', previous[entryProperty]);
 
         return false;
 
@@ -84,6 +85,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       return true;
 
     })
+    .sort()
 
     console.log('orgData: data', data);
 
