@@ -51,9 +51,16 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
       let previous = [];
 
+      // Have we seen this id before?
       if (seen.hasOwnProperty(entry.id)) {
 
+        // Acknowledgement
         console.log('I have seen id: ' + entry.id + ' before');
+
+        // Yes, grab it and add this data to it
+        previous = seen[entry.id];
+        console.log('previous', previous);
+
         return false;
 
       }
