@@ -118,25 +118,25 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     let o = {};
     const result1 = result.reduce((r, el) => {
 
-      // console.log('el', el);
-
       let e = el.id;
-      // console.log('e', e);
+      
+      const hobArray = [];
+      const favArray = [];
 
       if (!o[e]) {
         o[e] = {};
         o[e].id = el.id;
         
-        if (el.hobbies !== undefined) {
-          o[e].hobbies = el.hobbies;
-        } else {
-          console.log('undefined hobby', o[e]);
-        }
+        if (el.hobbies   !== undefined) { 
+          hobArray.push(el.hobbies);
+          // o[e].hobbies   = el.hobbies 
+          o[e].hobbies = hobArray;
+        };
         
-        if (el.favorites !== undefined) {
-          o[e].favorites = el.favorites;
-        }
-
+        if (el.favorites !== undefined) { 
+          favArray.push(el.favorites);
+          o[e].favorites = favArray; 
+        };
         r.push(o[e]);
       } else {
 
@@ -144,7 +144,9 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
           console.log('el.favorites', el.hobbies);
           if (o[e].favorites) {
             // console.log('Add to this', o[e]);
-            o[e].hobbies = el.hobbies;
+            hobArray.push(el.hobbies);
+            // o[e].hobbies = el.hobbies;
+            o[e].hobbies = hobArray;
           }
         }
 
@@ -152,7 +154,8 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
           console.log('el.favorites', el.favorites);
           if (o[e].hobbies) {
             // console.log('Add to this', o[e]);
-            o[e].favorites = el.favorites;
+            favArray.push(el.favorites);
+            o[e].favorites = favArray;
           }
         }
 
