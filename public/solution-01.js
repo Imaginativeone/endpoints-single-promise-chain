@@ -126,21 +126,25 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         // if (el.hobbies   && o[e].favorites) o[e].hobbies   = el.hobbies;
         // if (el.favorites && o[e].hobbies)   o[e].favorites = el.favorites;
 
-        if (el.hobbies) {
-          // console.log('el.favorites', el.favorites);
-          if (o[e].favorites) {
-            hobArray.push(el.hobbies);
-            o[e].hobbies = hobArray;
-          }
-        }
+        // if (el.hobbies) {
+        //   // console.log('el.favorites', el.favorites);
+        //   if (o[e].favorites) {
+        //     hobArray.push(el.hobbies);
+        //     o[e].hobbies = hobArray;
+        //   }
+        // }
+        
+        preserveArray(el, 'hobbies', 'favorites', o, e, hobArray);
 
-        if (el.favorites) {
-          // console.log('el.favorites', el.favorites);
-          if (o[e].hobbies) {
-            favArray.push(el.favorites);
-            o[e].favorites = favArray;
-          }
-        }
+        // if (el.favorites) {
+        //   // console.log('el.favorites', el.favorites);
+        //   if (o[e].hobbies) {
+        //     favArray.push(el.favorites);
+        //     o[e].favorites = favArray;
+        //   }
+        // }
+
+        preserveArray(el, 'favorites', 'hobbies', o, e, favArray);
 
       }
       return r;
@@ -152,11 +156,21 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
   })
 
-  function preserveArray(newArray, existingArray, content, hArray, fArray) { 
-    if (content && existingArray) {
-      newArray = content;
+  function preserveArray(element, type, oppositeType, object, objProperty, arr) {
+    if (element[type]) {
+      if (object[objProperty][oppositeType]) {
+        arr.push(element[type]);
+        object[objProperty][type] = arr;
+      }
     }
   }
+
+
+  // function preserveArray(newArray, existingArray, content, hArray, fArray) { 
+  //   if (content && existingArray) {
+  //     newArray = content;
+  //   }
+  // }
 
   function preserveArrayF(newArray, existingArray, content, hArray, fArray) { 
     if (content) {
