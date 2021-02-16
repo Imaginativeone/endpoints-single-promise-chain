@@ -130,6 +130,15 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         o[e].favorites = el.favorites;
         r.push(o[e]);
       } else {
+
+        if (el.hobbies) {
+          console.log('el.favorites', el.hobbies);
+          if (o[e].favorites) {
+            console.log('Add to this', o[e]);
+            o[e].hobbies = el.hobbies;
+          }
+        }
+
         if (el.favorites) {
           console.log('el.favorites', el.favorites);
           if (o[e].hobbies) {
@@ -137,6 +146,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
             o[e].favorites = el.favorites;
           }
         }
+
       }
       return r;
     }, [])
