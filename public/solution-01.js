@@ -113,20 +113,10 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       } else {
 
         // TODO: Current Development, refactor into a function
+        preserveArray(o[e].hobbies,   o[e].favorites, el.hobbies);
+        // preserveArray(o[e].favorites, o[e].hobbies,   el.favorites);
 
-        preserveArray(o[e].hobbies, o[e].favorites, el.hobbies);
-
-        // o[e].hobbies   = newArray
-        // o[e].favorites = existingArray
-        // el.hobbies     = content
-
-        // if (el.hobbies) {
-        //   // console.log('el.hobbies', el.hobbies);
-        //   if (o[e].favorites) {
-        //     hobArray.push(el.hobbies);
-        //     o[e].hobbies = hobArray;
-        //   }
-        // }
+        preserveArrayF(o[e].favorites, o[e].hobbies, el.favorites);
 
         if (el.favorites) {
           // console.log('el.favorites', el.favorites);
@@ -146,39 +136,51 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
   })
 
-  function preserveArray(newArray, existingArray, content) {
-
-    // const hobArray = [];
-    // const favArray = [];
-    const _array = [];
-
+  function preserveArrayF(newArray, existingArray, content) {
+    
     if (newArray && existingArray && content) {
+
+      const _array = [];
+
       console.log('Preserving Array', newArray, existingArray, content);
     } else {
       console.log('**********');
     }
 
-    // console.log('content', content);
+  }
+
+
+  function preserveArray(newArray, existingArray, content) {
+
+    const _array = [];
+
+    if (newArray && existingArray && content) {
+      // console.log('Preserving Array', newArray, existingArray, content);
+    } else {
+      // console.log('**********');
+    }
+
+    // // console.log('content', content);
     
     if (content) {
       
-      console.log('Content exists', content);
+      // console.log('Content exists', content);
       
       if (existingArray) {
 
-        console.log('An existingArray exists', existingArray);
+        // console.log('An existingArray exists', existingArray);
 
         _array.push(existingArray);
-        console.log('localArray', _array);
+        // console.log('localArray', _array);
 
+        // console.log(newArray.join() + 'sent back');
+        
         //   o[e].hobbies = hobArray;
         newArray = _array;
 
-        console.log(newArray.join() + 'sent back');
-
       } else {
 
-        // console.log('Non-existing Array');
+        // // console.log('Non-existing Array');
 
       }
     }
