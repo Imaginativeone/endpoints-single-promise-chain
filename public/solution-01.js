@@ -59,8 +59,11 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
         id = element.id;
 
+        console.log(element.name);
+
         genObject[element.id] = {
           id: element.id,
+          name: element.name,
           last_updated: element.last_modified,
         }
 
@@ -127,6 +130,8 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         o[e] = {};
         o[e].id = el.id;
         
+        if (el.name) o[e].name = el.name; // If a name is available, add it
+
         if (el.hobbies   !== undefined) { 
           hobArray.push(el.hobbies);
           // o[e].hobbies   = el.hobbies 
