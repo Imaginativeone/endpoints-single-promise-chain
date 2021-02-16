@@ -111,11 +111,28 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
       } else {
 
-        // TODO: Current Development, refactor into a function
-        preserveArray(o[e].hobbies,   o[e].favorites, el.hobbies);
-        // preserveArray(o[e].favorites, o[e].hobbies,   el.favorites);
+        // if (el.hobbies && o[e].favorites) {
+        //   o[e].hobbies = el.hobbies;
+        // }
 
-        preserveArray(o[e].favorites, o[e].hobbies, el.favorites);
+        // if (el.favorites && o[e].hobbies) {
+        //   o[e].favorites = el.favorites;
+        // }
+
+        // TODO: Current Development, refactor into a function
+        // preserveArray(o[e].hobbies, o[e].favorites, el.hobbies, hobArray, favArray);
+        // preserveArrayF(o[e].favorites, o[e].hobbies, el.favorites, hobArray, favArray);
+
+        // if (el.hobbies   && o[e].favorites) o[e].hobbies   = el.hobbies;
+        // if (el.favorites && o[e].hobbies)   o[e].favorites = el.favorites;
+
+        if (el.hobbies) {
+          // console.log('el.favorites', el.favorites);
+          if (o[e].favorites) {
+            hobArray.push(el.hobbies);
+            o[e].hobbies = hobArray;
+          }
+        }
 
         if (el.favorites) {
           // console.log('el.favorites', el.favorites);
@@ -135,67 +152,21 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
   })
 
-  // TODO: Current Development, Why doesn't this alrady work?
-  function preserveArrayF(newArray, existingArray, content) {
-    
-    const _array = [];
-    
-    if (newArray && existingArray && content) {
-      console.log('Preserving Array', newArray, existingArray, content);
-    } else {
-      console.log('**********');
+  function preserveArray(newArray, existingArray, content, hArray, fArray) { 
+    if (content && existingArray) {
+      newArray = content;
     }
-
-    // console.log('content', content);
-
-    if (content) {
-      console.log('Content exists', content);
-
-      if (existingArray) {
-        console.log('An existingArray exists', existingArray);
-        _array.push(existingArray);
-        console.log('localArray', _array);
-      }
-
-    }
-
   }
 
-
-  function preserveArray(newArray, existingArray, content) {
-
-    const _array = [];
-
-    if (newArray && existingArray && content) {
-      // console.log('Preserving Array', newArray, existingArray, content);
-    } else {
-      // console.log('**********');
-    }
-
-    // // console.log('content', content);
-    
+  function preserveArrayF(newArray, existingArray, content, hArray, fArray) { 
     if (content) {
-      
-      // console.log('Content exists', content);
-      
+      console.log('content', content);
       if (existingArray) {
-
-        // console.log('An existingArray exists', existingArray);
-        // _array.push(existingArray);
-        // console.log('localArray', _array);
-        // console.log(newArray.join() + 'sent back');
-        
-        newArray = content;
-
-        // newArray = _array;
-
-      } else {
-
-        // // console.log('Non-existing Array');
-
+        array.push(content);
+        newArray = array;
       }
     }
-
+    // return array;
   }
 
   function addTypeFlag(array, type) {
