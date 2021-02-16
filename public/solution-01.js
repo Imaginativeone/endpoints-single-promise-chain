@@ -49,7 +49,6 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
     let result = data.reduce((accumulator, element) => {
 
-      // TODO: Current Development, use only one id
       let genId = element.user_id ? element.user_id : element.id;
 
       if (element.infotype === 'updatedUser') {
@@ -116,7 +115,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         preserveArray(o[e].hobbies,   o[e].favorites, el.hobbies);
         // preserveArray(o[e].favorites, o[e].hobbies,   el.favorites);
 
-        preserveArrayF(o[e].favorites, o[e].hobbies, el.favorites);
+        preserveArray(o[e].favorites, o[e].hobbies, el.favorites);
 
         if (el.favorites) {
           // console.log('el.favorites', el.favorites);
@@ -136,15 +135,28 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
   })
 
+  // TODO: Current Development, Why doesn't this alrady work?
   function preserveArrayF(newArray, existingArray, content) {
     
+    const _array = [];
+    
     if (newArray && existingArray && content) {
-
-      const _array = [];
-
       console.log('Preserving Array', newArray, existingArray, content);
     } else {
       console.log('**********');
+    }
+
+    // console.log('content', content);
+
+    if (content) {
+      console.log('Content exists', content);
+
+      if (existingArray) {
+        console.log('An existingArray exists', existingArray);
+        _array.push(existingArray);
+        console.log('localArray', _array);
+      }
+
     }
 
   }
@@ -169,14 +181,13 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       if (existingArray) {
 
         // console.log('An existingArray exists', existingArray);
-
-        _array.push(existingArray);
+        // _array.push(existingArray);
         // console.log('localArray', _array);
-
         // console.log(newArray.join() + 'sent back');
         
-        //   o[e].hobbies = hobArray;
-        newArray = _array;
+        newArray = content;
+
+        // newArray = _array;
 
       } else {
 
