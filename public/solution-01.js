@@ -43,16 +43,9 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     // Make simulated user ids for the updated data that need them
     let genObject = {};
     let result = data.reduce((accumulator, element) => {
-
-      let genId = element.user_id ? element.user_id : element.id;
-
-      if (element.infotype === 'updatedUser')     genObject[genId] = makeShape(element, 'updatedUser');
-      if (element.infotype === 'updatedHobby')    genObject[genId] = makeShape(element, 'updatedHobby');
-      if (element.infotype === 'updatedFavorite') genObject[genId] = makeShape(element, 'updatedFavorite');
-
-      accumulator.push(genObject[genId]);
+      ['updatedUser', 'updatedHobby', 'updatedFavorite'].map(type => genObject = makeShape(element, type))
+      accumulator.push(genObject);
       return accumulator;
-
     }, [])
     .sort((a, b) => a.id-b.id);
 
@@ -88,49 +81,23 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
   function makeShape(iElement, type) {
 
-    console.log('iElement', iElement);
+    // console.log(iElement.infotype);
 
     let data;
     let genInternalId = iElement.user_id ? iElement.user_id : iElement.id;
 
-    // console.log('genInternalId', genInternalId);
+    data = { id: genInternalId }; // All elements
 
-    if (type ===  'updatedUser') {
-      // Updated Users
-      data = {
-        // id: iElement.id,
-        id: genInternalId,
-        name: iElement.name,
-        last_updated: iElement.last_modified
-      };
-
-      if (iElement.hobbies.length)   data.hobbies   = iElement.hobbies;
-      if (iElement.favorites.length) data.favorites = iElement.favorites;
-      // console.log('data created', data);
-      ///////////////////////////////////////////////////////////////////
+    if (iElement.infotype ===  'updatedUser') {
+      if (iElement.hobbies.length)    data.hobbies      = iElement.hobbies;
+      if (iElement.favorites.length)  data.favorites    = iElement.favorites;
+      if (iElement.name)              data.name         = iElement.name;
+      if (iElement.last_modified)     data.last_updated = iElement.last_modified;
     }
 
-    if (type === 'updatedHobby') {
+    if (iElement.infotype === 'updatedHobby') data.hobbies = iElement;
+    if (iElement.infotype === 'updatedFavorite') data.favorites = iElement;
 
-      // console.log('Functionality for hobby users goes here.');
-
-      // Updated Hobbies /////////////////////////////////////
-      data = {
-        id: iElement.user_id,
-        hobbies: iElement
-      }
-
-      // console.log('data created', data);
-      ///////////////////////////////////////////////////////////////////
-    }
-
-    if (type === 'updatedFavorite') {
-      data = {
-        id: iElement.user_id,
-        favorites: iElement
-      }
-      console.log('data created', data);
-    }
     return data;
   }
 
