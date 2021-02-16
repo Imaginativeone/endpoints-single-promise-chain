@@ -52,8 +52,12 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
     let result = data.reduce((accumulator, element) => {
 
+      let id;
+
       // Take the first object in the array called data
       if (element.infotype === 'updatedUser') {
+
+        id = element.id;
 
         genObject[element.id] = {
           id: element.id,
@@ -73,39 +77,75 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         }
 
         // console.log('updated user');
-        console.log('genObject', genObject[element.id]);
+        // console.log('genObject', genObject[element.id]);
 
       }
 
       if (element.infotype === 'updatedHobby') {
+
+        id = element.user_id;
+
         genObject[element.user_id] = {
           id: element.user_id,
           hobbies: element
         }
         // console.log('updated hobby');
-        console.log('genObject', genObject[element.user_id]);
+        // console.log('genObject', genObject[element.user_id]);
 
       }
       if (element.infotype === 'updatedFavorite') {
+
+        id = element.user_id;
+
         genObject[element.user_id] = {
           id: element.user_id,
           favorites: element
         }
         // console.log('updated favorite');
-        console.log('genObject', genObject[element.user_id]);
+        // console.log('genObject', genObject[element.user_id]);
       }
       
       // console.log('object', object);
+      
+      accumulator.push(genObject[id]);
+      // console.log('accumulator', accumulator);
 
       return accumulator;
 
-    }, []);
+    }, [])
+    .sort((a, b) => a.id-b.id);
 
-    // .sort((a, b) => a.id-b.id);
+    let o = {};
+    const result1 = result.reduce((r, el) => {
+
+      // console.log('el', el);
+
+      let e = el.id;
+      // console.log('e', e);
+
+      if (!o[e]) {
+        // o[e] = {
+        //   id: el.id,
+        //   hobbies: el.hobbies,
+        //   favorites: el.favorites
+        // }
+
+        o[e] = {};
+        o[e].id = el.id;
+        o[e].hobbies = el.hobbies;
+        o[e].favorites = el.favorites;
+
+        // if (o[e].hobbies && o[e])
+
+        r.push(o[e]);
+      }
+      return r;
+    }, [])
 
     // console.log('organizedData', organizedData);
 
     console.log('result', result);
+    console.log('result1', result1);
     console.log('orgData', orgData);
 
   })
