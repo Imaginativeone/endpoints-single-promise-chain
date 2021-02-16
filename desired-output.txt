@@ -1,0 +1,30 @@
+[
+  {
+    id: 1,        // This contains an updated user and an updated hobby
+    name: 'Steve',
+    last_updated: 'now',
+    hobbies: [
+      { id: 2, user_id: 1 }
+    ]
+  },
+  {
+    id: 2,      // this contains only an updated hobby
+    hobbies: [
+      { id: 2, user_id: 2}
+    ]
+  },
+  {
+    id: 3,    // this contains an updated hobby and an updated favorite
+    hobbies: [
+      { id: 4, user_id: 3}
+    ],
+    favorites: [ 
+      { id: 1, user_id: 3} 
+    ]
+  }, 
+  {
+    id: 4,  // this contains only an updated user
+    name: 'Mike',
+    last_updated: 'now'
+  }
+]
