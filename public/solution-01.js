@@ -66,7 +66,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
         if (type === 'updatedHobby') {
 
-          console.log('Functionality for hobby users goes here.');
+          // console.log('Functionality for hobby users goes here.');
 
           // Updated Hobbies /////////////////////////////////////
           data = {
@@ -74,28 +74,24 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
             hobbies: iElement
           }
 
-          console.log('data created', data);
+          // console.log('data created', data);
           ///////////////////////////////////////////////////////////////////
         }
 
+        if (type === 'updatedFavorite') {
+          data = {
+            id: element.user_id,
+            favorites: element
+          }
+          console.log('data created', data);
+        }
         return data;
       }
 
-      if (element.infotype === 'updatedUser') {        
-        genObject[element.id] = makeShape(element, 'updatedUser');
-      }
-      
-      if (element.infotype === 'updatedHobby') {
-        genObject[element.user_id] = makeShape(element, 'updatedHobby');      
-      }
+      if (element.infotype === 'updatedUser')     genObject[genId] = makeShape(element, 'updatedUser');
+      if (element.infotype === 'updatedHobby')    genObject[genId] = makeShape(element, 'updatedHobby');
+      if (element.infotype === 'updatedFavorite') genObject[genId] = makeShape(element, 'updatedFavorite');
 
-      if (element.infotype === 'updatedFavorite') {
-        genObject[element.user_id] = {
-          id: element.user_id,
-          favorites: element
-        }
-
-      }
       accumulator.push(genObject[genId]);
       return accumulator;
     }, [])
