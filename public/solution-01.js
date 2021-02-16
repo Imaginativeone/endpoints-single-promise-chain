@@ -124,20 +124,19 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       // console.log('e', e);
 
       if (!o[e]) {
-        // o[e] = {
-        //   id: el.id,
-        //   hobbies: el.hobbies,
-        //   favorites: el.favorites
-        // }
-
         o[e] = {};
         o[e].id = el.id;
         o[e].hobbies = el.hobbies;
         o[e].favorites = el.favorites;
-
-        // if (o[e].hobbies && o[e])
-
         r.push(o[e]);
+      } else {
+        if (el.favorites) {
+          console.log('el.favorites', el.favorites);
+          if (o[e].hobbies) {
+            console.log('Add to this', o[e]);
+            o[e].favorites = el.favorites;
+          }
+        }
       }
       return r;
     }, [])
