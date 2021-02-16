@@ -39,9 +39,6 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     console.log('orgData', orgData);
 
     const usrs = addTypeFlag(orgData[0], 'updatedUser');
-    // const hobs = simParents(orgData[1], 'hobby');
-    // const favs = simParents(orgData[2], 'favorite');
-
     const hobs = addTypeFlag(orgData[1], 'updatedHobby');
     const favs = addTypeFlag(orgData[2], 'updatedFavorite');
 
@@ -52,25 +49,10 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
     let result = data.reduce((accumulator, element) => {
 
-      // let id;
-
       // TODO: Current Development, use only one id
-
       let genId = element.user_id ? element.user_id : element.id;
-      console.log('genId', genId);
 
-      // if (element.user_id) {
-      //   console.log('id', element.user_id)
-      // } else {
-      //   console.log('id', element.id);
-      // }
-
-
-      // Take the first object in the array called data
       if (element.infotype === 'updatedUser') {
-
-        // id = element.id;
-
         genObject[element.id] = {
           id: element.id,
           name: element.name,
@@ -81,35 +63,21 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       }
 
       if (element.infotype === 'updatedHobby') {
-
-        // id = element.user_id;
-
         genObject[element.user_id] = {
           id: element.user_id,
           hobbies: element
         }
-        // console.log('updated hobby');
-        // console.log('genObject', genObject[element.user_id]);
-
       }
+
       if (element.infotype === 'updatedFavorite') {
-
-        // id = element.user_id;
-
         genObject[element.user_id] = {
           id: element.user_id,
           favorites: element
         }
-        // console.log('updated favorite');
-        // console.log('genObject', genObject[element.user_id]);
+
       }
       
-      // console.log('object', object);
-      
-      // accumulator.push(genObject[id]);
       accumulator.push(genObject[genId]);
-      // console.log('accumulator', accumulator);
-
       return accumulator;
 
     }, [])
@@ -128,7 +96,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         o[e] = {};
         o[e].id = el.id;
 
-        if (el.name)         o[e].name = el.name; // If a name is available, add it
+        if (el.name)         o[e].name = el.name;
         if (el.last_updated) o[e].last_updated = el.last_updated;
 
         if (el.hobbies   !== undefined) { 
@@ -141,7 +109,10 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
           o[e].favorites = favArray; 
         };
         r.push(o[e]);
+
       } else {
+
+        console.log('Hello');
 
         if (el.hobbies) {
           console.log('el.favorites', el.hobbies);
@@ -176,23 +147,23 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     return array;
   }
 
-  function simParents(children, childName) {
+  // function simParents(children, childName) {
 
-    return children.reduce(function(parents, child, i) {
+  //   return children.reduce(function(parents, child, i) {
 
-      // console.log('simParents: child', child);
+  //     // console.log('simParents: child', child);
 
-      const parent = {
-        id: children[i]['user_id'],
-        [childName]: child
-      };
+  //     const parent = {
+  //       id: children[i]['user_id'],
+  //       [childName]: child
+  //     };
 
-      // parents[i] = parent;
-      parents.push(parent);
-      return parents;
+  //     // parents[i] = parent;
+  //     parents.push(parent);
+  //     return parents;
 
-    }, []);
-  }
+  //   }, []);
+  // }
 
   function tryUrl(url, data, method='get') { 
     return fetch(url, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) || null })
