@@ -46,21 +46,49 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
       let genId = element.user_id ? element.user_id : element.id;
 
-      if (element.infotype === 'updatedUser') {
-        genObject[element.id] = {
-          id: element.id,
-          name: element.name,
-          last_updated: element.last_modified,
+      function makeShape(iElement, type) {
+
+        let data;
+
+        if (type ===  'updatedUser') {
+          // Updated Users
+          data = {
+            id: iElement.id,
+            name: iElement.name,
+            last_updated: iElement.last_modified
+          };
+  
+          if (iElement.hobbies.length)   data.hobbies   = iElement.hobbies;
+          if (iElement.favorites.length) data.favorites = iElement.favorites;
+          // console.log('data created', data);
+          ///////////////////////////////////////////////////////////////////
         }
-        if (element.hobbies.length)   genObject[element.id].hobbies   = element.hobbies;
-        if (element.favorites.length) genObject[element.id].favorites = element.favorites;
+
+        if (type === 'updatedHobby') {
+
+          console.log('Functionality for hobby users goes here.');
+
+          // Updated Hobbies /////////////////////////////////////
+          data = {
+            id: element.user_id,
+            hobbies: iElement
+          }
+
+          console.log('data created', data);
+          ///////////////////////////////////////////////////////////////////
+        }
+
+        return data;
       }
+
+      if (element.infotype === 'updatedUser') {        
+        genObject[element.id] = makeShape(element, 'updatedUser');
+      }
+      
       if (element.infotype === 'updatedHobby') {
-        genObject[element.user_id] = {
-          id: element.user_id,
-          hobbies: element
-        }
+        genObject[element.user_id] = makeShape(element, 'updatedHobby');      
       }
+
       if (element.infotype === 'updatedFavorite') {
         genObject[element.user_id] = {
           id: element.user_id,
