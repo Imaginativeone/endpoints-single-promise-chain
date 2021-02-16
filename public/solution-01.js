@@ -35,18 +35,13 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     return data;
   })
   .then((orgData) => {
-
-    console.log('orgData', orgData);
-
     const usrs = addTypeFlag(orgData[0], 'updatedUser');
     const hobs = addTypeFlag(orgData[1], 'updatedHobby');
     const favs = addTypeFlag(orgData[2], 'updatedFavorite');
-
     const data = usrs.concat(hobs, favs);
-    console.log('combined data', data);
 
+    // Make simulated user ids for the updated data that need them
     let genObject = {};
-
     let result = data.reduce((accumulator, element) => {
 
       let genId = element.user_id ? element.user_id : element.id;
@@ -60,14 +55,12 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         if (element.hobbies.length)   genObject[element.id].hobbies   = element.hobbies;
         if (element.favorites.length) genObject[element.id].favorites = element.favorites;
       }
-
       if (element.infotype === 'updatedHobby') {
         genObject[element.user_id] = {
           id: element.user_id,
           hobbies: element
         }
       }
-
       if (element.infotype === 'updatedFavorite') {
         genObject[element.user_id] = {
           id: element.user_id,
@@ -75,85 +68,39 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         }
 
       }
-      
       accumulator.push(genObject[genId]);
       return accumulator;
-
     }, [])
     .sort((a, b) => a.id-b.id);
 
+    // Merge the simulated and non-simulated user information
     let o = {};
-    const result1 = result.reduce((r, el) => {
-
+    const mergedUsers = result.reduce((r, el) => {
       let e = el.id;
-      
       const hobArray = [];
       const favArray = [];
-
       if (!o[e]) {
-
         o[e] = {};
         o[e].id = el.id;
-
         if (el.name)         o[e].name = el.name;
         if (el.last_updated) o[e].last_updated = el.last_updated;
-
         if (el.hobbies   !== undefined) { 
           hobArray.push(el.hobbies);
           o[e].hobbies = hobArray;
         };
-        
         if (el.favorites !== undefined) { 
           favArray.push(el.favorites);
           o[e].favorites = favArray; 
         };
         r.push(o[e]);
-
       } else {
-
-        // if (el.hobbies && o[e].favorites) {
-        //   o[e].hobbies = el.hobbies;
-        // }
-
-        // if (el.favorites && o[e].hobbies) {
-        //   o[e].favorites = el.favorites;
-        // }
-
-        // TODO: Current Development, refactor into a function
-        // preserveArray(o[e].hobbies, o[e].favorites, el.hobbies, hobArray, favArray);
-        // preserveArrayF(o[e].favorites, o[e].hobbies, el.favorites, hobArray, favArray);
-
-        // if (el.hobbies   && o[e].favorites) o[e].hobbies   = el.hobbies;
-        // if (el.favorites && o[e].hobbies)   o[e].favorites = el.favorites;
-
-        // if (el.hobbies) {
-        //   // console.log('el.favorites', el.favorites);
-        //   if (o[e].favorites) {
-        //     hobArray.push(el.hobbies);
-        //     o[e].hobbies = hobArray;
-        //   }
-        // }
-        
-        preserveArray(el, 'hobbies', 'favorites', o, e, hobArray);
-
-        // if (el.favorites) {
-        //   // console.log('el.favorites', el.favorites);
-        //   if (o[e].hobbies) {
-        //     favArray.push(el.favorites);
-        //     o[e].favorites = favArray;
-        //   }
-        // }
-
-        preserveArray(el, 'favorites', 'hobbies', o, e, favArray);
-
+        preserveArray(el, 'hobbies',   'favorites', o, e, hobArray);
+        preserveArray(el, 'favorites', 'hobbies',   o, e, favArray);
       }
       return r;
     }, [])
 
-    console.log('result', result);
-    console.log('result1', result1);
-    console.log('orgData', orgData);
-
+    console.log('mergedUsers', mergedUsers);
   })
 
   function preserveArray(element, type, oppositeType, object, objProperty, arr) {
@@ -165,48 +112,12 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
     }
   }
 
-
-  // function preserveArray(newArray, existingArray, content, hArray, fArray) { 
-  //   if (content && existingArray) {
-  //     newArray = content;
-  //   }
-  // }
-
-  function preserveArrayF(newArray, existingArray, content, hArray, fArray) { 
-    if (content) {
-      console.log('content', content);
-      if (existingArray) {
-        array.push(content);
-        newArray = array;
-      }
-    }
-    // return array;
-  }
-
   function addTypeFlag(array, type) {
     array.map((item) => {      
       item.infotype = type;
     });
     return array;
   }
-
-  // function simParents(children, childName) {
-
-  //   return children.reduce(function(parents, child, i) {
-
-  //     // console.log('simParents: child', child);
-
-  //     const parent = {
-  //       id: children[i]['user_id'],
-  //       [childName]: child
-  //     };
-
-  //     // parents[i] = parent;
-  //     parents.push(parent);
-  //     return parents;
-
-  //   }, []);
-  // }
 
   function tryUrl(url, data, method='get') { 
     return fetch(url, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) || null })
