@@ -127,10 +127,16 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       const favArray = [];
 
       if (!o[e]) {
+
         o[e] = {};
         o[e].id = el.id;
-        
-        if (el.name) o[e].name = el.name; // If a name is available, add it
+
+        if (el.name)         o[e].name = el.name; // If a name is available, add it
+        if (el.last_updated) o[e].last_updated = el.last_updated;
+
+        // o[e].last_updated = el.last_modified;
+
+        console.log('END: el', el);
 
         if (el.hobbies   !== undefined) { 
           hobArray.push(el.hobbies);
