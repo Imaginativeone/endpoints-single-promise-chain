@@ -46,54 +46,13 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
       let genId = element.user_id ? element.user_id : element.id;
 
-      function makeShape(iElement, type) {
-
-        let data;
-
-        if (type ===  'updatedUser') {
-          // Updated Users
-          data = {
-            id: iElement.id,
-            name: iElement.name,
-            last_updated: iElement.last_modified
-          };
-  
-          if (iElement.hobbies.length)   data.hobbies   = iElement.hobbies;
-          if (iElement.favorites.length) data.favorites = iElement.favorites;
-          // console.log('data created', data);
-          ///////////////////////////////////////////////////////////////////
-        }
-
-        if (type === 'updatedHobby') {
-
-          // console.log('Functionality for hobby users goes here.');
-
-          // Updated Hobbies /////////////////////////////////////
-          data = {
-            id: element.user_id,
-            hobbies: iElement
-          }
-
-          // console.log('data created', data);
-          ///////////////////////////////////////////////////////////////////
-        }
-
-        if (type === 'updatedFavorite') {
-          data = {
-            id: element.user_id,
-            favorites: element
-          }
-          console.log('data created', data);
-        }
-        return data;
-      }
-
       if (element.infotype === 'updatedUser')     genObject[genId] = makeShape(element, 'updatedUser');
       if (element.infotype === 'updatedHobby')    genObject[genId] = makeShape(element, 'updatedHobby');
       if (element.infotype === 'updatedFavorite') genObject[genId] = makeShape(element, 'updatedFavorite');
 
       accumulator.push(genObject[genId]);
       return accumulator;
+
     }, [])
     .sort((a, b) => a.id-b.id);
 
@@ -126,6 +85,54 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
     console.log('mergedUsers', mergedUsers);
   })
+
+  function makeShape(iElement, type) {
+
+    console.log('iElement', iElement);
+
+    let data;
+    let genInternalId = iElement.user_id ? iElement.user_id : iElement.id;
+
+    // console.log('genInternalId', genInternalId);
+
+    if (type ===  'updatedUser') {
+      // Updated Users
+      data = {
+        // id: iElement.id,
+        id: genInternalId,
+        name: iElement.name,
+        last_updated: iElement.last_modified
+      };
+
+      if (iElement.hobbies.length)   data.hobbies   = iElement.hobbies;
+      if (iElement.favorites.length) data.favorites = iElement.favorites;
+      // console.log('data created', data);
+      ///////////////////////////////////////////////////////////////////
+    }
+
+    if (type === 'updatedHobby') {
+
+      // console.log('Functionality for hobby users goes here.');
+
+      // Updated Hobbies /////////////////////////////////////
+      data = {
+        id: iElement.user_id,
+        hobbies: iElement
+      }
+
+      // console.log('data created', data);
+      ///////////////////////////////////////////////////////////////////
+    }
+
+    if (type === 'updatedFavorite') {
+      data = {
+        id: iElement.user_id,
+        favorites: iElement
+      }
+      console.log('data created', data);
+    }
+    return data;
+  }
 
   function preserveArray(element, type, oppositeType, object, objProperty, arr) {
     if (element[type]) {
