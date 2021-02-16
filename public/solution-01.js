@@ -126,15 +126,24 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       if (!o[e]) {
         o[e] = {};
         o[e].id = el.id;
-        o[e].hobbies = el.hobbies;
-        o[e].favorites = el.favorites;
+        
+        if (el.hobbies !== undefined) {
+          o[e].hobbies = el.hobbies;
+        } else {
+          console.log('undefined hobby', o[e]);
+        }
+        
+        if (el.favorites !== undefined) {
+          o[e].favorites = el.favorites;
+        }
+
         r.push(o[e]);
       } else {
 
         if (el.hobbies) {
           console.log('el.favorites', el.hobbies);
           if (o[e].favorites) {
-            console.log('Add to this', o[e]);
+            // console.log('Add to this', o[e]);
             o[e].hobbies = el.hobbies;
           }
         }
@@ -142,7 +151,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         if (el.favorites) {
           console.log('el.favorites', el.favorites);
           if (o[e].hobbies) {
-            console.log('Add to this', o[e]);
+            // console.log('Add to this', o[e]);
             o[e].favorites = el.favorites;
           }
         }
