@@ -52,41 +52,37 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
 
     let result = data.reduce((accumulator, element) => {
 
-      let id;
+      // let id;
+
+      // TODO: Current Development, use only one id
+
+      let genId = element.user_id ? element.user_id : element.id;
+      console.log('genId', genId);
+
+      // if (element.user_id) {
+      //   console.log('id', element.user_id)
+      // } else {
+      //   console.log('id', element.id);
+      // }
+
 
       // Take the first object in the array called data
       if (element.infotype === 'updatedUser') {
 
-        id = element.id;
-
-        console.log(element.name);
+        // id = element.id;
 
         genObject[element.id] = {
           id: element.id,
           name: element.name,
           last_updated: element.last_modified,
         }
-
-        // TODO: ternary operator
-        if (element.hobbies.length < 1) {
-        } else {
-          genObject[element.id].hobbies = element.hobbies;
-        }
-
-        // TODO: ternary operator
-        if (element.favorites.length < 1) {
-        } else {
-          genObject[element.id].favorites = element.favorites;
-        }
-
-        // console.log('updated user');
-        // console.log('genObject', genObject[element.id]);
-
+        if (element.hobbies.length)   genObject[element.id].hobbies   = element.hobbies;
+        if (element.favorites.length) genObject[element.id].favorites = element.favorites;
       }
 
       if (element.infotype === 'updatedHobby') {
 
-        id = element.user_id;
+        // id = element.user_id;
 
         genObject[element.user_id] = {
           id: element.user_id,
@@ -98,7 +94,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       }
       if (element.infotype === 'updatedFavorite') {
 
-        id = element.user_id;
+        // id = element.user_id;
 
         genObject[element.user_id] = {
           id: element.user_id,
@@ -110,7 +106,8 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       
       // console.log('object', object);
       
-      accumulator.push(genObject[id]);
+      // accumulator.push(genObject[id]);
+      accumulator.push(genObject[genId]);
       // console.log('accumulator', accumulator);
 
       return accumulator;
@@ -134,13 +131,8 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         if (el.name)         o[e].name = el.name; // If a name is available, add it
         if (el.last_updated) o[e].last_updated = el.last_updated;
 
-        // o[e].last_updated = el.last_modified;
-
-        console.log('END: el', el);
-
         if (el.hobbies   !== undefined) { 
           hobArray.push(el.hobbies);
-          // o[e].hobbies   = el.hobbies 
           o[e].hobbies = hobArray;
         };
         
@@ -154,9 +146,7 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         if (el.hobbies) {
           console.log('el.favorites', el.hobbies);
           if (o[e].favorites) {
-            // console.log('Add to this', o[e]);
             hobArray.push(el.hobbies);
-            // o[e].hobbies = el.hobbies;
             o[e].hobbies = hobArray;
           }
         }
@@ -164,7 +154,6 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
         if (el.favorites) {
           console.log('el.favorites', el.favorites);
           if (o[e].hobbies) {
-            // console.log('Add to this', o[e]);
             favArray.push(el.favorites);
             o[e].favorites = favArray;
           }
@@ -173,8 +162,6 @@ Promise.all([tryUrl('/users'), tryUrl('/hobbies'), tryUrl('/favorites')])
       }
       return r;
     }, [])
-
-    // console.log('organizedData', organizedData);
 
     console.log('result', result);
     console.log('result1', result1);
